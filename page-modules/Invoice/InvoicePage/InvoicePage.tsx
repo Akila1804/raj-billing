@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Plus, Eye, Pencil, BarChart3, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,6 @@ interface InvoiceInterface {
 }
 
 export default function InvoicePage({ invoice }: InvoiceInterface) {
-  console.log("invoice", invoice);
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [year, setYear] = useState("");
@@ -48,6 +47,14 @@ export default function InvoicePage({ invoice }: InvoiceInterface) {
       return matchesYear && matchesMonth && matchesSearch;
     });
   }, [search, year, month, invoice]);
+
+  useEffect(() => {
+    const session = sessionStorage.getItem("adminToken");
+
+    if (!session) {
+      router.push("/");
+    }
+  }, []);
 
   const totalCount = invoice.length;
   const totalAmount = invoice.reduce((sum, item) => sum + item.grandTotal, 0);

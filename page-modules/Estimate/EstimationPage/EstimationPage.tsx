@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Plus, Eye, Pencil, BarChart3, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import {
@@ -17,7 +17,6 @@ interface EstimationInterface {
 }
 
 export default function EstimationPage({ estimate }: EstimationInterface) {
-  console.log("estimate", estimate);
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [year, setYear] = useState("");
@@ -47,6 +46,14 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
       return matchesYear && matchesMonth && matchesSearch;
     });
   }, [search, year, month, estimate]);
+
+  useEffect(() => {
+    const session = sessionStorage.getItem("adminToken");
+
+    if (!session) {
+      router.push("/");
+    }
+  }, []);
 
   const totalCount = estimate.length;
   const totalAmount = estimate.reduce((sum, item) => sum + item.grandTotal, 0);

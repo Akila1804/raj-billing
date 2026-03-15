@@ -3,7 +3,7 @@
 import axios from "axios";
 import { Download, ArrowLeftIcon } from "lucide-react";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -11,6 +11,7 @@ import { numberToWords } from "./NumberToWords";
 import Link from "next/link";
 import { ESTIMATION } from "@/constants/path";
 const PreviewEstimate = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const invoiceRef = useRef<HTMLDivElement>(null);
@@ -68,6 +69,14 @@ const PreviewEstimate = () => {
       fetchEstimateData();
     }
   }, [id]);
+
+  useEffect(() => {
+    const session = sessionStorage.getItem("adminToken");
+
+    if (!session) {
+      router.push("/");
+    }
+  }, []);
 
   const subTotal = products.reduce((sum, p) => sum + p.amount, 0);
   const taxableAmount = subTotal + Number(form.packing);

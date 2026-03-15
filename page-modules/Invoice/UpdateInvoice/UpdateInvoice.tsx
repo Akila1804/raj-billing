@@ -65,6 +65,14 @@ const UpdateInvoice = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+    const session = sessionStorage.getItem("adminToken");
+
+    if (!session) {
+      router.push("/");
+    }
+  }, []);
+
   const handleProductChange = (
     index: number,
     field: string,

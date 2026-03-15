@@ -1,9 +1,21 @@
+"use client";
 import Image from "next/image";
 import { Calculator, FileText } from "lucide-react";
 import Link from "next/link";
 import { ESTIMATION, INVOICE } from "@/constants/path";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
+  const router = useRouter();
+  useEffect(() => {
+    const session = sessionStorage.getItem("adminToken");
+
+    if (!session) {
+      router.push("/");
+    }
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-6">
       {/* Logo + Title */}
