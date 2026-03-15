@@ -1,4 +1,4 @@
-import PreviewEstimate from "@/page-modules/PreviewEstimatePage/PreviewEstimate";
+import PreviewEstimate from "@/page-modules/Estimate/PreviewEstimatePage/PreviewEstimate";
 import { Suspense } from "react";
 
 const page = () => {

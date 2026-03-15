@@ -1,4 +1,4 @@
-import AddEstimation from "@/page-modules/AddEstimation/AddEstimation";
+import AddEstimation from "@/page-modules/Estimate/AddEstimation/AddEstimation";
 
 const page = () => {
   return <AddEstimation />;

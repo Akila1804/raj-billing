@@ -195,13 +195,13 @@ const PreviewEstimate = () => {
                 </h3>
 
                 <div className="flex items-center text-center gap-2 font-bold text-xl text-[#1a8393]">
-                  <img
+                  {/* <img
                     src="/smalllogo.png"
                     alt="Logo"
                     width="42"
                     height="42"
                     style={{ objectFit: "fill", marginTop: "3px" }}
-                  />
+                  /> */}
                   <span>Raj Printers</span>
                 </div>
                 <p>862/4, Bypass Road Sivakasi, Tamil Nadu</p>

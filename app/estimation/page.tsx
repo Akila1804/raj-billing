@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import EstimationPage from "@/page-modules/EstimationPage/EstimationPage";
+import EstimationPage from "@/page-modules/Estimate/EstimationPage/EstimationPage";
 
 const page = async () => {
   const { data: estimate } = await supabase

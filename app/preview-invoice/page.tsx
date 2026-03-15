@@ -1,10 +1,10 @@
-import UpdateEstimate from "@/page-modules/Estimate/UpdateEstimation/UpdateEstimate";
+import PreviewInvoice from "@/page-modules/Invoice/PreviewInvoicePage/PreviewInvoice";
 import { Suspense } from "react";
 
 const page = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <UpdateEstimate />
+      <PreviewInvoice />
     </Suspense>
   );
 };
