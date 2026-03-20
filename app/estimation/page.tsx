@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import EstimationPage from "@/page-modules/Estimate/EstimationPage/EstimationPage";
-
+export const dynamic = "force-dynamic";
 const page = async () => {
   const { data: estimate } = await supabase
     .from("estimate")

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Eye, EyeOff, Lock, LogIn, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { DASHBOARD } from "@/constants/path";
+export const dynamic = "force-dynamic";
 
 export default function LoginPage() {
   const router = useRouter();
