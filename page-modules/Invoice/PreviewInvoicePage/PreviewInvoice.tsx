@@ -10,6 +10,14 @@ import html2canvas from "html2canvas";
 import { numberToWords } from "./NumberToWords";
 import Link from "next/link";
 import { INVOICE } from "@/constants/path";
+import {
+  ACCOUNT_NUMBER,
+  ACCOUNT_NUMBER_2,
+  BANK_NAME,
+  BANK_NAME_2,
+  IFSC_CODE,
+  IFSC_CODE_2,
+} from "@/constants/data";
 
 const PreviewInvoice = () => {
   const router = useRouter();
@@ -155,7 +163,8 @@ const PreviewInvoice = () => {
             minHeight: "297mm",
             background: "white",
             color: "black",
-            padding: "10mm",
+            border: "5px solid #0b95a9",
+            padding: "8mm",
             paddingTop: "5mm",
             boxSizing: "border-box",
           }}
@@ -177,7 +186,7 @@ const PreviewInvoice = () => {
             </div>
             <div className="text-center flex justify-center flex-col items-center ">
               <h1 className="text-xl  font-bold tracking-wide text-[#0b95a9]">
-                Invoice SLIP
+                INVOICE SLIP
               </h1>
             </div>
 
@@ -226,7 +235,7 @@ const PreviewInvoice = () => {
                 </p>
 
                 <p className="font-mono">
-                  <strong>GST:</strong> 33XXXXXXXXX
+                  <strong>GST:</strong> 33ABAFR4520K1ZE
                 </p>
               </div>
 
@@ -371,16 +380,16 @@ const PreviewInvoice = () => {
                   <div className="space-y-1">
                     <p className="font-bold text-md">Bank Account 1</p>
                     <p>
-                      <strong>Bank:</strong> State Bank of India
+                      <strong>Bank:</strong> {BANK_NAME}
                     </p>
                     <p>
-                      <strong>A/c No:</strong> 123456789012
+                      <strong>A/c No:</strong> {ACCOUNT_NUMBER}
                     </p>
                     <p>
-                      <strong>IFSC:</strong> SBIN0001234
+                      <strong>IFSC:</strong> {IFSC_CODE}
                     </p>
                     <p>
-                      <strong>Branch:</strong> Sivakasi Main Branch
+                      <strong>Branch:</strong> Sivakasi
                     </p>
                   </div>
 
@@ -388,13 +397,13 @@ const PreviewInvoice = () => {
                   <div className="space-y-1">
                     <p className="font-bold text-md">Bank Account 2</p>
                     <p>
-                      <strong>Bank:</strong> Indian Bank
+                      <strong>Bank:</strong> {BANK_NAME_2}
                     </p>
                     <p>
-                      <strong>A/c No:</strong> 987654321098
+                      <strong>A/c No:</strong> {ACCOUNT_NUMBER_2}
                     </p>
                     <p>
-                      <strong>IFSC:</strong> IDIB000S123
+                      <strong>IFSC:</strong> {IFSC_CODE_2}
                     </p>
                     <p>
                       <strong>Branch:</strong> Sivakasi
