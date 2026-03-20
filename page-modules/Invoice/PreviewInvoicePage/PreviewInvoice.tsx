@@ -412,13 +412,16 @@ const PreviewInvoice = () => {
 
                   {/* UPI / GPay */}
                   <div className="space-y-1">
-                    <p className="font-bold text-base">UPI / GPay</p>
+                    <p className="font-bold text-base">GPay</p>
                     <p>
                       <strong>GPay Number:</strong> 9842366710
                     </p>
                     <p>
-                      <strong>UPI ID:</strong> rajprinters@okaxis
+                      <strong>GPay Number:</strong> 8838290321
                     </p>
+                    {/* <p>
+                      <strong>UPI ID:</strong> rajprinters@okaxis
+                    </p> */}
                   </div>
                 </div>
               </div>

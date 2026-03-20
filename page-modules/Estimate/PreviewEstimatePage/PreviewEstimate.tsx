@@ -238,7 +238,7 @@ const PreviewEstimate = () => {
                 </p>
 
                 <p className="font-mono">
-                  <strong>GST:</strong> 33XXXXXXXXX
+                  <strong>GST:</strong> 33ABAFR4520K1ZE
                 </p>
               </div>
 
@@ -415,13 +415,16 @@ const PreviewEstimate = () => {
 
                   {/* UPI / GPay */}
                   <div className="space-y-1">
-                    <p className="font-bold text-base">UPI / GPay</p>
+                    <p className="font-bold text-base">GPay</p>
                     <p>
                       <strong>GPay Number:</strong> 9842366710
                     </p>
                     <p>
-                      <strong>UPI ID:</strong> rajprinters@okaxis
+                      <strong>GPay Number:</strong> 8838290321
                     </p>
+                    {/* <p>
+                      <strong>UPI ID:</strong> rajprinters@okaxis
+                    </p> */}
                   </div>
                 </div>
               </div>
