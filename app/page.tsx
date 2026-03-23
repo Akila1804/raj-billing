@@ -40,7 +40,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center text-black bg-gradient-to-br from-gray-600 via-gray-800 to-gray-900 px-6 py-12">
       <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
 
-      <div className="relative bg-white shadow-2xl rounded-3xl w-full max-w-md p-8 sm:p-10 transform transition-all duration-300 hover:shadow-3xl">
+      <div className="relative bg-white shadow-2xl rounded-3xl w-full max-w-md p-8 sm:p-10   duration-300 hover:shadow-3xl">
         <div className="absolute -top-6 -right-6 w-32 h-32 bg-blue-500 rounded-full opacity-10 blur-2xl"></div>
         <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-teal-500 rounded-full opacity-10 blur-2xl"></div>
 
@@ -63,7 +63,7 @@ export default function LoginPage() {
               <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                 <Mail
                   size={16}
-                  className="text-gray-400 group-focus-within:text-blue-500 transition-colors"
+                  className="text-gray-400 group-focus-within:text-blue-500 "
                 />
                 Username
               </label>
@@ -73,7 +73,7 @@ export default function LoginPage() {
                 value={form.username}
                 onChange={handleChange}
                 placeholder="username"
-                className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 placeholder:text-gray-400"
+                className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500  duration-200 placeholder:text-gray-400"
               />
             </div>
 
@@ -82,7 +82,7 @@ export default function LoginPage() {
               <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                 <Lock
                   size={16}
-                  className="text-gray-400 group-focus-within:text-blue-500 transition-colors"
+                  className="text-gray-400 group-focus-within:text-blue-500 "
                 />
                 Password
               </label>
@@ -94,11 +94,11 @@ export default function LoginPage() {
                   value={form.password}
                   onChange={handleChange}
                   placeholder="password"
-                  className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 placeholder:text-gray-400"
+                  className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500  duration-200 placeholder:text-gray-400"
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 "
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -110,7 +110,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 disabled:from-gray-400 disabled:to-gray-400 text-white py-3.5 rounded-xl flex items-center justify-center gap-2 font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 disabled:transform-none disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 disabled:from-gray-400 disabled:to-gray-400 text-white py-3.5 rounded-xl flex items-center justify-center gap-2 font-semibold shadow-lg hover:shadow-xl  duration-200  disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <>

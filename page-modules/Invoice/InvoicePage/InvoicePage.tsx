@@ -317,7 +317,7 @@ export default function InvoicePage({ invoice }: InvoiceInterface) {
 
           <div className="fixed bottom-8 right-8 z-10">
             <button
-              className="flex items-center gap-2 cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105"
+              className="flex items-center gap-2 cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition  "
               onClick={handleAddInvoice}
             >
               <Plus size={20} />

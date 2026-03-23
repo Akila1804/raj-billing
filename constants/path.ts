@@ -11,3 +11,7 @@ export const INVOICE = "/invoice";
 export const ADD_INVOICE = "/add-invoice";
 export const UPDATE_INVOICE = "/update-invoice";
 export const PREVIEW_INVOICE = "/preview-invoice";
+
+// Tally
+export const TALLY = "/tally";
+export const TALLY_DETAILS = "/tally-details";

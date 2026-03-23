@@ -306,10 +306,7 @@ const UpdateEstimate = () => {
                 </thead>
                 <tbody>
                   {products.map((product, index) => (
-                    <tr
-                      key={product.id}
-                      className="hover:bg-white/60 transition-colors"
-                    >
+                    <tr key={product.id} className="hover:bg-white/60 ">
                       <td className="p-4 font-mono text-sm font-semibold">
                         {index + 1}
                       </td>
@@ -365,7 +362,7 @@ const UpdateEstimate = () => {
                         {products.length > 1 && (
                           <button
                             onClick={() => removeProduct(index)}
-                            className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200"
+                            className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl  duration-200"
                           >
                             <Trash2 size={18} />
                           </button>
@@ -378,7 +375,7 @@ const UpdateEstimate = () => {
             </div>
             <button
               onClick={addProduct}
-              className="mt-6 flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              className="mt-6 flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl  duration-200"
             >
               <Plus size={20} />
               Add Item
@@ -482,7 +479,7 @@ const UpdateEstimate = () => {
             <button
               disabled={loading}
               onClick={handleUpdateEstimate}
-              className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white px-12 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300"
+              className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white px-12 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl  hover:-translate-y-1  duration-300"
             >
               {loading ? "Saving..." : "💾 Save"}
             </button>

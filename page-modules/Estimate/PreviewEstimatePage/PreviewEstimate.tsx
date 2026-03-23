@@ -168,7 +168,7 @@ const PreviewEstimate = () => {
             color: "black",
             border: "5px solid #0b95a9",
             padding: "8mm",
-            paddingTop: "5mm",
+            paddingTop: "2mm",
             boxSizing: "border-box",
           }}
         >
@@ -269,14 +269,14 @@ const PreviewEstimate = () => {
                       <strong>GST:</strong> {form.gst}
                     </p>
                   )}
-                  <p>
+                  {/* <p>
                     <strong>Date:</strong>{" "}
                     {new Date(form.date).toLocaleDateString("en-GB", {
                       day: "2-digit",
                       month: "short",
                       year: "numeric",
                     })}
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>
@@ -306,19 +306,19 @@ const PreviewEstimate = () => {
                 <tbody>
                   {products.map((p, index) => (
                     <tr key={p.id}>
-                      <td className="border border-[#b4b4b4] p-0.5 text-center font-medium">
+                      <td className="border border-[#b4b4b4] p-0.5 mb-1 text-center font-medium">
                         {index + 1}
                       </td>
-                      <td className="border border-[#b4b4b4] p-0.5 font-medium">
+                      <td className="border border-[#b4b4b4] p-0.5  mb-1 font-medium">
                         {p.name}
                       </td>
-                      <td className="border border-[#b4b4b4] p-0.5 text-center font-medium">
+                      <td className="border border-[#b4b4b4] p-0.5 mb-1 text-center font-medium">
                         {p.qty}
                       </td>
-                      <td className="border border-[#b4b4b4] p-0.5 text-right font-medium">
+                      <td className="border border-[#b4b4b4] p-0.5 mb-1 text-right font-medium">
                         ₹ {p.rate.toLocaleString()}
                       </td>
-                      <td className="border border-[#b4b4b4] p-0.5 text-right font-bold text-base">
+                      <td className="border border-[#b4b4b4] p-0.5 mb-1 text-right font-bold text-base">
                         ₹ {p.amount.toLocaleString()}
                       </td>
                     </tr>
@@ -485,7 +485,7 @@ const PreviewEstimate = () => {
       </div>
       <div className="fixed bottom-8 right-8 z-10">
         <button
-          className="flex items-center gap-2 cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105"
+          className="flex items-center gap-2 cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition  "
           onClick={downloadImage}
         >
           <Download size={20} />
