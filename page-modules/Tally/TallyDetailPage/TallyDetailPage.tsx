@@ -54,6 +54,7 @@ export default function LedgerPage() {
     address: "",
     gst: "",
   });
+  const today = new Date().toISOString().split("T")[0];
 
   // Generate unique estimation number
 
@@ -292,11 +293,13 @@ export default function LedgerPage() {
           <input
             type="date"
             className="border p-2"
+            max={today}
             onChange={(e) => setFromDate(e.target.value)}
           />
           <input
             type="date"
             className="border p-2"
+            max={today}
             onChange={(e) => setToDate(e.target.value)}
           />
         </div>

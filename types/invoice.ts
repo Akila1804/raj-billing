@@ -18,10 +18,14 @@ export interface Invoice {
   packing: number;
   cgst_percent: number;
   sgst_percent: number;
+  igst_percent: number;
   products: Product[];
   subTotal: number;
   cgstAmount: number;
   sgstAmount: number;
+  igstAmount: number;
   grandTotal: number;
   created_at: string;
+  terms_from_date: number;
+  terms_to_date: number;
 }

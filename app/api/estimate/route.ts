@@ -19,11 +19,15 @@ export async function POST(req: NextRequest) {
         packing: form.packing,
         cgst_percent: form.cgst,
         sgst_percent: form.sgst,
+        igst_percent: form.igst,
         products: products,
         subTotal: totals.subTotal,
         cgstAmount: totals.cgstAmount,
         sgstAmount: totals.sgstAmount,
+        igstAmount: totals.igstAmount,
         grandTotal: totals.grandTotal,
+        terms_from_date: totals.terms_from_date,
+        terms_to_date: totals.terms_to_date,
       },
     ]);
 
@@ -110,10 +114,14 @@ export async function PATCH(req: NextRequest) {
       products: products,
       cgst_percent: form.cgst,
       sgst_percent: form.sgst,
+      igst_percent: form.igst,
       subTotal: totals.subTotal,
       cgstAmount: totals.cgstAmount,
       sgstAmount: totals.sgstAmount,
+      igstAmount: totals.igstAmount,
       grandTotal: totals.grandTotal,
+      terms_from_date: totals.terms_from_date,
+      terms_to_date: totals.terms_to_date,
     };
 
     const { error } = await supabase

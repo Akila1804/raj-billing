@@ -433,23 +433,14 @@ const PreviewEstimate = () => {
               <h3 className="font-bold text-sm pb-1 text-black border-b w-fit">
                 Terms & Conditions
               </h3>
-              <ul className="list-disc text-[10px] text-black pt-1 pl-4">
-                <li>Design Your&apos;s Scope </li>
-                <li> GST Extra </li>
-                <li> Freight Charge Extra </li>
-                <li>
-                  100% Advance Will be accompained While Placing The Order
-                </li>
-                <li>
-                  {" "}
-                  The Good Delivery With in
-                  <span className="text-[#f00]"> _ </span>to
-                  <span className="text-[#f00]"> _ </span>
-                  Days
-                </li>
-                <li>Goods once sold will not be taken back or exchanged.</li>
-                <li>Delivery subject to stock availability.</li>
-              </ul>
+              <div className="list-disc text-[10px] text-black pt-1 pl-2">
+                Design Your&apos;s Scope. GST Extra. Freight Charge. Extra 100%
+                Advance Will be accompained while placing the order. The good
+                delivery with in <span className="text-[#f00]"> _ </span>to{" "}
+                <span className="text-[#f00]"> _ </span> days. Goods once sold
+                will not be taken back or exchanged. Delivery subject to stock
+                availability.
+              </div>
             </div>
             {/* Bank Details */}
             {/* <div className="w-full">

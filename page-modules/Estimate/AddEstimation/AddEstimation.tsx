@@ -28,6 +28,9 @@ export default function AddEstimation() {
     packing: 0,
     cgst: 9,
     sgst: 9,
+    igst: 0,
+    terms_from_date: 0,
+    terms_to_date: 0,
   });
 
   // Generate unique estimation number
@@ -84,15 +87,18 @@ export default function AddEstimation() {
 
   const cgstAmount = (taxableAmount * form.cgst) / 100;
   const sgstAmount = (taxableAmount * form.sgst) / 100;
+  const igstAmount = (taxableAmount * form.igst) / 100;
 
-  const grandTotal = taxableAmount + cgstAmount + sgstAmount;
+  const grandTotal = taxableAmount + cgstAmount + sgstAmount + igstAmount;
 
   const handleSave = async () => {
     if (
       !form.customerName.trim() ||
       !form.phone.trim() ||
       !form.city.trim() ||
-      !form.address.trim()
+      !form.address.trim() ||
+      !form.terms_from_date ||
+      !form.terms_to_date
     ) {
       Swal.fire("Please fill all required fields (marked with *)");
       return;
@@ -112,11 +118,7 @@ export default function AddEstimation() {
       Swal.fire("Add at least one product");
       return;
     }
-    console.log("Saving estimation:", {
-      form,
-      products,
-      totals: { subTotal, cgstAmount, sgstAmount, grandTotal },
-    });
+
     setloading(true);
     try {
       const res = await fetch("/api/estimate", {
@@ -127,7 +129,7 @@ export default function AddEstimation() {
         body: JSON.stringify({
           form,
           products,
-          totals: { subTotal, cgstAmount, sgstAmount, grandTotal },
+          totals: { subTotal, cgstAmount, sgstAmount, igstAmount, grandTotal },
         }),
       });
 
@@ -459,15 +461,79 @@ export default function AddEstimation() {
                 </span>
               </div>
 
+              {/* IGST */}
+              <div className="flex justify-between items-center gap-2">
+                <div className="flex justify-between items-center gap-2">
+                  <span>IGST</span>
+
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      className="w-14 border rounded-lg px-1 py-1 text-right"
+                      value={form.igst}
+                      onChange={(e) =>
+                        setForm({ ...form, igst: Number(e.target.value) })
+                      }
+                    />
+                  </div>
+                </div>
+                <span className="w-24 text-right">
+                  ₹{igstAmount.toFixed(2)}
+                </span>
+              </div>
+
               <div className="pt-4 border-t text-lg font-bold flex justify-between">
                 <span>Grand Total</span>
                 <span>₹{grandTotal.toFixed(2)}</span>
               </div>
             </div>
           </div>
-
+          <div className="flex flex-col">
+            <h3 className="font-bold text-sm pb-1 text-red-600 border-b w-fit">
+              Terms & Conditions
+            </h3>
+            <div className="flex flex-row gap-5 py-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700">
+                  From Days <span className="text-red-700 pb-2">*</span>
+                </label>
+                <input
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none duration-200 shadow-sm"
+                  placeholder="From Day"
+                  value={form.terms_from_date}
+                  required
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      terms_from_date: Number(e.target.value),
+                    })
+                  }
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700">
+                  To Days <span className="text-red-700 pb-2">*</span>
+                </label>
+                <input
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none duration-200 shadow-sm"
+                  placeholder="To Days"
+                  value={form.terms_to_date}
+                  required
+                  onChange={(e) =>
+                    setForm({ ...form, terms_to_date: Number(e.target.value) })
+                  }
+                />
+              </div>
+            </div>
+          </div>
           {/* Save Button */}
-          <div className="mt-12 text-center">
+          <div className="mt-12 text-center flex gap-6 justify-center">
+            <Link
+              href={ESTIMATION}
+              className="bg-gray-400 text-black px-12 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl  hover:-translate-y-1  duration-300"
+            >
+              Cancel
+            </Link>
             <button
               disabled={loading}
               onClick={handleSave}

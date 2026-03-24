@@ -1,6 +1,13 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Eye, Pencil, BarChart3, TrendingUp } from "lucide-react";
+import {
+  Plus,
+  Eye,
+  Pencil,
+  BarChart3,
+  TrendingUp,
+  ArrowLeftFromLineIcon,
+} from "lucide-react";
 import Image from "next/image";
 import {
   ADD_ESTIMATION,
@@ -22,7 +29,10 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const itemsPerPage = 10;
+  const today = new Date().toISOString().split("T")[0];
 
   const filteredData = useMemo(() => {
     return estimate.filter((item) => {
@@ -43,9 +53,23 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
         ? merged.includes(search.toLowerCase())
         : true;
 
-      return matchesYear && matchesMonth && matchesSearch;
+      // ✅ FROM DATE
+      const matchesFromDate = fromDate ? itemDate >= new Date(fromDate) : true;
+
+      // ✅ TO DATE
+      const matchesToDate = toDate
+        ? itemDate <= new Date(toDate + "T23:59:59")
+        : true;
+
+      return (
+        matchesYear &&
+        matchesMonth &&
+        matchesSearch &&
+        matchesFromDate &&
+        matchesToDate
+      );
     });
-  }, [search, year, month, estimate]);
+  }, [search, year, month, fromDate, toDate, estimate]);
 
   useEffect(() => {
     const session = sessionStorage.getItem("adminToken");
@@ -79,7 +103,7 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b shadow-sm">
-        <div className=" px-6 py-2">
+        <div className=" px-6 py-2 flex justify-between">
           <Link href={DASHBOARD}>
             <Image
               src="/logo.png"
@@ -89,6 +113,15 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
               className=" w-52 h-20"
             />
           </Link>
+          <div className="flex items-center">
+            <Link
+              href={DASHBOARD}
+              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm shadow-md transition w-fit"
+            >
+              <ArrowLeftFromLineIcon size={16} />
+              Back to Home
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -129,32 +162,43 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
         </div>
 
         {/* Filters */}
-        <div className="bg-white  rounded-xl p-6 mb-6 shadow-sm">
-          <div className="grid md:grid-cols-3 gap-4">
-            <input
-              type="text"
-              placeholder="Search (No / Name / Location / Date)..."
-              className="border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-4 py-2 text-sm outline-none"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+        <div className="bg-white rounded-xl p-6 mb-6 shadow-sm">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end justify-center">
+            {/* 🔍 Search */}
+            <div className="col-span-3">
+              <label className="text-xs text-gray-500">Search</label>
+              <input
+                type="text"
+                placeholder="No / Name / Location / Date..."
+                className="w-full border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-4 py-2 text-sm outline-none"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
 
-            <select
-              className="border border-gray-300 rounded-lg px-4 py-2 text-sm"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-            >
-              <option value="">All Years</option>
-              <option>2026</option>
-              <option>2025</option>
-            </select>
-            <div>
+            {/* 📅 Year */}
+            <div className="col-span-1">
+              <label className="text-xs text-gray-500">Year</label>
               <select
-                className="border border-gray-300 rounded-lg px-4 py-2 text-sm h-14 w-full"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm"
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+              >
+                <option value="">All</option>
+                <option>2026</option>
+                <option>2025</option>
+              </select>
+            </div>
+
+            {/* 📆 Month */}
+            <div className="col-span-2">
+              <label className="text-xs text-gray-500">Month</label>
+              <select
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm"
                 value={month}
                 onChange={(e) => setMonth(e.target.value)}
               >
-                <option value="">All Months</option>
+                <option value="">All</option>
                 <option>January</option>
                 <option>February</option>
                 <option>March</option>
@@ -169,9 +213,53 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
                 <option>December</option>
               </select>
             </div>
+
+            {/* 📅 Date Range */}
+            <div className="flex gap-2 col-span-5">
+              <div className="w-full">
+                <label className="text-xs text-gray-500">From</label>
+                <input
+                  type="date"
+                  max={today}
+                  className="w-full border border-gray-300 rounded-lg px-2 py-2 text-sm"
+                  onChange={(e) => setFromDate(e.target.value)}
+                />
+              </div>
+
+              <div className="w-full">
+                <label className="text-xs text-gray-500">To</label>
+                <input
+                  type="date"
+                  max={today}
+                  className="w-full border border-gray-300 rounded-lg px-2 py-2 text-sm"
+                  onChange={(e) => setToDate(e.target.value)}
+                />
+              </div>
+            </div>
+            {search !== "" ||
+            year !== "" ||
+            month !== "" ||
+            fromDate !== "" ||
+            toDate !== "" ? (
+              <div className="col-span-1 h-full flex items-end">
+                <button
+                  onClick={() => {
+                    setSearch("");
+                    setYear("");
+                    setMonth("");
+                    setFromDate("");
+                    setToDate("");
+                  }}
+                  className="text-sm text-red-500 mt-1 "
+                >
+                  Clear Filters
+                </button>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
-
         {/* Table */}
         <div className="bg-white  rounded-xl overflow-hidden shadow-sm">
           <div className="md:w-full w-screen overflow-x-auto">

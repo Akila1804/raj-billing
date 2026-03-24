@@ -1,6 +1,12 @@
 "use client";
 import { DASHBOARD, TALLY_DETAILS } from "@/constants/path";
-import { BarChart3, Eye, Pencil, Plus } from "lucide-react";
+import {
+  ArrowLeftFromLineIcon,
+  BarChart3,
+  Eye,
+  Pencil,
+  Plus,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -174,7 +180,7 @@ const TallyPage = ({ members }: MembersInterface) => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b shadow-sm">
-        <div className=" px-6 py-2">
+        <div className=" px-6 py-2 flex justify-between">
           <Link href={DASHBOARD}>
             <Image
               src="/logo.png"
@@ -184,8 +190,18 @@ const TallyPage = ({ members }: MembersInterface) => {
               className=" w-52 h-20"
             />
           </Link>
+          <div className="flex items-center">
+            <Link
+              href={DASHBOARD}
+              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm shadow-md transition w-fit"
+            >
+              <ArrowLeftFromLineIcon size={16} />
+              Back to Home
+            </Link>
+          </div>
         </div>
       </div>
+
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
