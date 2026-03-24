@@ -7,7 +7,11 @@ const page = async () => {
     .from("member")
     .select("*")
     .order("created_at", { ascending: false });
-  return <TallyPage members={members ?? []} />;
+  const { data: voucher } = await supabase
+    .from("voucher")
+    .select("*")
+    .order("created_at", { ascending: false });
+  return <TallyPage members={members ?? []} voucher={voucher ?? []} />;
 };
 
 export default page;

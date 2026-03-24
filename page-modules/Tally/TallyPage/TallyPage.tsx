@@ -13,20 +13,15 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { generateCustomerNumber } from "./generateCustomerNumber";
-
-interface Member {
-  customer_no: string;
-  customer_name: string;
-  phone: string;
-  address: string;
-  gst: string;
-}
+import { Entry, Member } from "@/types/tally";
 
 interface MembersInterface {
   members: Member[];
+  voucher: Entry[];
 }
 
-const TallyPage = ({ members }: MembersInterface) => {
+const TallyPage = ({ members, voucher }: MembersInterface) => {
+  console.log("voucher", voucher);
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [data, setData] = useState(members);
@@ -63,6 +58,37 @@ const TallyPage = ({ members }: MembersInterface) => {
       return matchesSearch;
     });
   }, [search, data]);
+
+  const summaryMap = useMemo(() => {
+    const map: Record<string, { debit: number; credit: number }> = {};
+
+    voucher.forEach((v) => {
+      if (!map[v.customer_no]) {
+        map[v.customer_no] = { debit: 0, credit: 0 };
+      }
+
+      map[v.customer_no].debit += v.debit || 0;
+      map[v.customer_no].credit += v.credit || 0;
+    });
+
+    return map;
+  }, [voucher]);
+
+  const totals = useMemo(() => {
+    let debit = 0;
+    let credit = 0;
+
+    voucher.forEach((v) => {
+      debit += v.debit || 0;
+      credit += v.credit || 0;
+    });
+
+    return {
+      totalDebit: debit,
+      totalCredit: credit,
+      totalBalance: debit - credit,
+    };
+  }, [voucher]);
 
   useEffect(() => {
     setData(members);
@@ -215,6 +241,21 @@ const TallyPage = ({ members }: MembersInterface) => {
             <p className="text-3xl font-bold text-blue-400">{totalCount}</p>
             <p className="text-xs text-slate-500 mt-2">All time estimations</p>
           </div>
+          {/* 💰 Total Debit */}
+          <div className="bg-gradient-to-br from-green-500/10 to-green-500/5 border border-green-500/20 rounded-xl p-6">
+            <p className="text-slate-400 text-sm">Total Debit</p>
+            <p className="text-2xl font-bold text-green-500">
+              {totals.totalDebit.toLocaleString()}
+            </p>
+          </div>
+
+          {/* ⚖ Balance */}
+          <div className="bg-gradient-to-br from-indigo-500/10 to-indigo-500/5 border border-indigo-500/20 rounded-xl p-6">
+            <p className="text-slate-400 text-sm">Balance</p>
+            <p className="text-2xl font-bold text-indigo-500">
+              {totals.totalBalance.toLocaleString()}
+            </p>
+          </div>
         </div>
 
         {/* Filters */}
@@ -238,8 +279,9 @@ const TallyPage = ({ members }: MembersInterface) => {
                   <th className="p-3 text-left">Customer No</th>
                   <th className="p-3 text-left">Customer Name</th>
                   <th className="p-3 text-left">Phone</th>
-                  <th className="p-3 text-left">Address</th>
-                  <th className="p-3 text-left">GST</th>
+                  <th className="p-3 text-right">Total Debit</th>
+                  <th className="p-3 text-right">Total Credit</th>
+                  <th className="p-3 text-right">Balance</th>
                   <th className="p-3 text-center">Actions</th>
                 </tr>
               </thead>
@@ -248,64 +290,79 @@ const TallyPage = ({ members }: MembersInterface) => {
                 {paginatedProducts.length === 0 && (
                   <tr>
                     <td
-                      colSpan={10}
+                      colSpan={8}
                       className="px-6 py-8 text-center text-slate-400"
                     >
-                      <p className="text-sm">
-                        No estimations found matching your filters
-                      </p>
+                      No customers found
                     </td>
                   </tr>
                 )}
-                {paginatedProducts.map((item, index) => (
-                  <tr
-                    key={item.customer_no}
-                    className="border-t hover:bg-gray-50"
-                  >
-                    <td className="p-3">{index + 1}</td>
 
-                    <td className="p-3 font-medium text-blue-600">
-                      {item.customer_no}
-                    </td>
+                {paginatedProducts.map((item, index) => {
+                  const summary = summaryMap[item.customer_no] || {
+                    debit: 0,
+                    credit: 0,
+                  };
 
-                    <td className="p-3 text-gray-600">{item.customer_name}</td>
-                    <td className="p-3 text-gray-600">{item.phone}</td>
+                  const balance = summary.debit - summary.credit;
 
-                    <td className="p-3 font-semibold text-emerald-600">
-                      {item.address}
-                    </td>
+                  return (
+                    <tr
+                      key={item.customer_no}
+                      className="border-t hover:bg-gray-50"
+                    >
+                      <td className="p-3">{index + 1}</td>
 
-                    <td className="p-3">{item.gst ? item.gst : "-"}</td>
+                      <td className="p-3 font-medium text-blue-600">
+                        {item.customer_no}
+                      </td>
 
-                    <td className="p-3">
-                      <div className="flex justify-center gap-2">
-                        <button
-                          className="p-2 hover:bg-blue-100 rounded"
-                          onClick={() =>
-                            router.push(
-                              `${TALLY_DETAILS}?id=${item.customer_no}`,
-                            )
-                          }
-                          title="Preview"
-                        >
-                          <Eye size={16} className="text-blue-600" />
-                        </button>
+                      <td className="p-3 text-gray-600">
+                        {item.customer_name}
+                      </td>
 
-                        <button
-                          className="p-2 hover:bg-green-100 rounded cursor-pointer"
-                          onClick={() => handleEdit(item)}
-                          title="Edit"
-                        >
-                          <Pencil size={16} className="text-green-600" />
-                        </button>
+                      <td className="p-3 text-gray-600">{item.phone}</td>
 
-                        {/* <button className="p-2 hover:bg-red-100 rounded">
-                        <Trash2 size={16} className="text-red-600" />
-                      </button> */}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      {/* 💰 Total Debit */}
+                      <td className="p-3 text-right font-semibold text-green-600">
+                        {summary.debit.toLocaleString()}
+                      </td>
+
+                      {/* 💰 Total Credit */}
+                      <td className="p-3 text-right font-semibold text-red-500">
+                        {summary.credit.toLocaleString()}
+                      </td>
+
+                      {/* ⚖ Balance */}
+                      <td className="p-3 text-right font-bold">
+                        {balance.toLocaleString()}
+                      </td>
+
+                      {/* Actions */}
+                      <td className="p-3">
+                        <div className="flex justify-center gap-2">
+                          <button
+                            className="p-2 hover:bg-blue-100 rounded"
+                            onClick={() =>
+                              router.push(
+                                `${TALLY_DETAILS}?id=${item.customer_no}`,
+                              )
+                            }
+                          >
+                            <Eye size={16} className="text-blue-600" />
+                          </button>
+
+                          <button
+                            className="p-2 hover:bg-green-100 rounded"
+                            onClick={() => handleEdit(item)}
+                          >
+                            <Pencil size={16} className="text-green-600" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

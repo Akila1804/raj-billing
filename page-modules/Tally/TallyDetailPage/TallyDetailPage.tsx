@@ -9,22 +9,7 @@ import { generateVocherNumber } from "./generateVoucherNo";
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
 import { TALLY } from "@/constants/path";
-interface Entry {
-  voucher_id: string;
-  date: string;
-  product: string;
-  description?: string;
-  debit: number;
-  credit: number;
-}
-
-interface Member {
-  customer_no: string;
-  customer_name: string;
-  phone: string;
-  address: string;
-  gst: string;
-}
+import { Entry, Member } from "@/types/tally";
 
 export default function LedgerPage() {
   const searchParams = useSearchParams();
@@ -46,6 +31,7 @@ export default function LedgerPage() {
     description: "",
     debit: 0,
     credit: 0,
+    customer_no: "",
   });
   const [formData, setFormData] = useState<Member>({
     customer_no: "",
@@ -185,6 +171,7 @@ export default function LedgerPage() {
       description: "",
       debit: 0,
       credit: 0,
+      customer_no: "",
     });
   };
 
@@ -484,7 +471,7 @@ export default function LedgerPage() {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700">
-                    Debit <span className="text-red-700 pb-2">*</span>
+                    Debit
                   </label>
                   <input
                     type="number"
@@ -498,7 +485,7 @@ export default function LedgerPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700">
-                    Credit <span className="text-red-700 pb-2">*</span>
+                    Credit
                   </label>
                   <input
                     type="number"
