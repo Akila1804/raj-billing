@@ -224,7 +224,7 @@ const PreviewInvoice = () => {
                   <img
                     src="/logo.png"
                     alt="Logo"
-                    className="block h-9 w-auto object-contain align-middle"
+                    className="block h-11 w-auto object-contain align-middle"
                   />
                 </div>
                 <p>862/4, Bypass Road Sivakasi, Tamil Nadu</p>
@@ -310,19 +310,19 @@ const PreviewInvoice = () => {
                 <tbody>
                   {products.map((p, index) => (
                     <tr key={p.id}>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1 text-center font-medium">
+                      <td className="border border-[#b4b4b4] p-0.5 mb-1.5 text-center font-medium">
                         {index + 1}
                       </td>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1 font-medium">
+                      <td className=" border border-[#b4b4b4] p-0.5 mb-1.5 font-medium break-all max-w-[300px]">
                         {p.name}
                       </td>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1 text-center font-medium">
+                      <td className="border border-[#b4b4b4] p-0.5 mb-1.5 text-center font-medium">
                         {p.qty}
                       </td>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1 text-right font-medium">
+                      <td className="border border-[#b4b4b4] p-0.5 mb-1.5 text-right font-medium">
                         ₹ {p.rate.toLocaleString()}
                       </td>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1 text-right font-bold text-base">
+                      <td className="border border-[#b4b4b4] p-0.5 mb-1.5 text-right font-bold text-base">
                         ₹ {p.amount.toLocaleString()}
                       </td>
                     </tr>
@@ -473,12 +473,12 @@ const PreviewInvoice = () => {
           <div>
             {/* Footer */}
             <div className="pt-8 text-center text-sm text-black space-y-2">
-              <div className="flex justify-end items-end ">
+              <div className="flex justify-end items-end pb-2">
                 {/* <div>
                   <p className="font-semibold">Payment Info</p>
                   <p>Bank Transfer / Cash / UPI</p>
                 </div> */}
-                <div className="text-right pb-2">
+                <div className="text-right">
                   <div className="h-20   flex items-end justify-center mb-1">
                     <span className="bg-white px-2 border-dashed border-black border-t">
                       Authorized Signature
