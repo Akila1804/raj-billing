@@ -131,7 +131,7 @@ const PreviewEstimate = () => {
 
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "ordersummary.pdf";
+    link.download = form.estimationNo;
     link.click();
   };
 
@@ -213,16 +213,16 @@ const PreviewEstimate = () => {
                   Bill From
                 </h3>
 
-                <div className="flex items-center text-center gap-2 font-bold text-xl text-[#1a8393]">
-                  {/* <img
-                    src="/smalllogo.png"
+                <div className="align-middle">
+                  <img
+                    src="/logo.png"
                     alt="Logo"
-                    width="42"
-                    height="42"
-                    style={{ objectFit: "fill", marginTop: "3px" }}
-                  /> */}
-                  <span>Raj Printers</span>
+                    className="block h-9 w-auto object-contain align-middle"
+                  />
                 </div>
+                {/* <span className="">
+                  Raj Printers
+                </span> */}
                 <p>862/4, Bypass Road Sivakasi, Tamil Nadu</p>
 
                 <p>
@@ -306,19 +306,19 @@ const PreviewEstimate = () => {
                 <tbody>
                   {products.map((p, index) => (
                     <tr key={p.id}>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1 text-center font-medium">
+                      <td className="border border-[#b4b4b4] p-0.5 mb-1.5 text-center font-medium">
                         {index + 1}
                       </td>
-                      <td className="border border-[#b4b4b4] p-0.5  mb-1 font-medium">
+                      <td className="border border-[#b4b4b4] p-0.5  mb-1.5 font-medium">
                         {p.name}
                       </td>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1 text-center font-medium">
+                      <td className="border border-[#b4b4b4] p-0.5 mb-1.5 text-center font-medium">
                         {p.qty}
                       </td>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1 text-right font-medium">
+                      <td className="border border-[#b4b4b4] p-0.5 mb-1.5 text-right font-medium">
                         ₹ {p.rate.toLocaleString()}
                       </td>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1 text-right font-bold text-base">
+                      <td className="border border-[#b4b4b4] p-0.5 mb-1.5 text-right font-bold text-base">
                         ₹ {p.amount.toLocaleString()}
                       </td>
                     </tr>
@@ -433,12 +433,23 @@ const PreviewEstimate = () => {
               <h3 className="font-bold text-sm pb-1 text-black border-b w-fit">
                 Terms & Conditions
               </h3>
-              <div className="list-disc text-[10px] text-black pt-1">
-                Payment due upon confirmation of order. Price may change based
-                on material cost fluctuations. GST extra as applicable. Goods
-                once sold will not be taken back or exchanged. Delivery subject
-                to stock availability.
-              </div>
+              <ul className="list-disc text-[10px] text-black pt-1 pl-4">
+                <li>Design Your&apos;s Scope </li>
+                <li> GST Extra </li>
+                <li> Freight Charge Extra </li>
+                <li>
+                  100% Advance Will be accompained While Placing The Order
+                </li>
+                <li>
+                  {" "}
+                  The Good Delivery With in
+                  <span className="text-[#f00]"> _ </span>to
+                  <span className="text-[#f00]"> _ </span>
+                  Days
+                </li>
+                <li>Goods once sold will not be taken back or exchanged.</li>
+                <li>Delivery subject to stock availability.</li>
+              </ul>
             </div>
             {/* Bank Details */}
             {/* <div className="w-full">
@@ -463,7 +474,7 @@ const PreviewEstimate = () => {
                   <p className="font-semibold">Payment Info</p>
                   <p>Bank Transfer / Cash / UPI</p>
                 </div> */}
-                <div className="text-right">
+                <div className="text-right pb-2">
                   <div className="h-20   flex items-end justify-center mb-1">
                     <span className="bg-white px-2 border-dashed border-black border-t">
                       Authorized Signature
@@ -474,9 +485,9 @@ const PreviewEstimate = () => {
                   </p>
                 </div>
               </div>
-              <p className="text-xs bg-white pb-2 rounded">
+              {/* <p className="text-xs bg-white pb-2 rounded">
                 This is a computer generated estimation
-              </p>
+              </p> */}
             </div>
             {/* Bottom Bar */}
             <div className="h-2 bg-[#0b95a9]" />

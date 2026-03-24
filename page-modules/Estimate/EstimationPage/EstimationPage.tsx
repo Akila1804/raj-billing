@@ -112,7 +112,7 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
               <TrendingUp className="w-5 h-5 text-emerald-400" />
             </div>
             <p className="text-3xl font-bold text-emerald-400">
-              ₹{(totalAmount / 100000).toFixed(1)}L
+              ₹{totalAmount.toLocaleString()}
             </p>
             <p className="text-xs text-slate-500 mt-2">Project value</p>
           </div>
