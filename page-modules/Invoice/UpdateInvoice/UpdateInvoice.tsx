@@ -61,7 +61,6 @@ const UpdateInvoice = () => {
               ? JSON.parse(invoice.products)
               : invoice.products || [],
           );
-          console.log("Invoice", invoice);
         } catch (error) {
           console.error("Error fetching Invoice data:", error);
         }
@@ -70,14 +69,6 @@ const UpdateInvoice = () => {
       fetchInvoiceData();
     }
   }, [id]);
-
-  useEffect(() => {
-    const session = sessionStorage.getItem("adminToken");
-
-    if (!session) {
-      router.push("/");
-    }
-  }, []);
 
   const handleProductChange = (
     index: number,
@@ -146,7 +137,6 @@ const UpdateInvoice = () => {
         text: "Invoice updated successfully",
       });
       router.push(INVOICE);
-      console.log("Update response:", res.data);
     } catch (error) {
       console.error(error);
       setloading(false);
@@ -327,7 +317,7 @@ const UpdateInvoice = () => {
                         <input
                           type="number"
                           min="0"
-                          step="0.01"
+                          step="1"
                           className="w-full h-15 px-2 py-2 text-right border border-gray-200 rounded-lg focus:outline-none"
                           value={product.qty}
                           onChange={(e) =>

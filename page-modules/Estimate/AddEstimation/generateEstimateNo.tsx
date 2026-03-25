@@ -6,7 +6,6 @@ export const generateEstimationNumber = async () => {
     .select("estimationNo")
     .order("estimationNo", { ascending: false })
     .limit(1);
-  console.log("lastNumber", data);
 
   if (error) {
     console.error(error);

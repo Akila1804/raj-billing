@@ -21,7 +21,6 @@ interface MembersInterface {
 }
 
 const TallyPage = ({ members, voucher }: MembersInterface) => {
-  console.log("voucher", voucher);
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [data, setData] = useState(members);
@@ -93,14 +92,6 @@ const TallyPage = ({ members, voucher }: MembersInterface) => {
   useEffect(() => {
     setData(members);
   }, [members]);
-
-  useEffect(() => {
-    const session = sessionStorage.getItem("adminToken");
-
-    if (!session) {
-      router.push("/");
-    }
-  }, []);
 
   const totalCount = filteredData.length;
   const paginatedProducts = filteredData.slice(
@@ -230,7 +221,7 @@ const TallyPage = ({ members, voucher }: MembersInterface) => {
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20 rounded-xl p-6 backdrop-blur">
             <div className="flex items-center justify-between mb-2">
               <p className="text-slate-400 text-sm font-medium">
@@ -248,7 +239,13 @@ const TallyPage = ({ members, voucher }: MembersInterface) => {
               {totals.totalDebit.toLocaleString()}
             </p>
           </div>
-
+          {/* 💸 Total Credit */}
+          <div className="bg-gradient-to-br from-red-500/10 to-red-500/5 border border-red-500/20 rounded-xl p-6">
+            <p className="text-slate-400 text-sm">Total Credit</p>
+            <p className="text-2xl font-bold text-red-500">
+              {totals.totalCredit.toLocaleString()}
+            </p>
+          </div>
           {/* ⚖ Balance */}
           <div className="bg-gradient-to-br from-indigo-500/10 to-indigo-500/5 border border-indigo-500/20 rounded-xl p-6">
             <p className="text-slate-400 text-sm">Balance</p>

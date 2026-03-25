@@ -26,8 +26,8 @@ export async function POST(req: NextRequest) {
         sgstAmount: totals.sgstAmount,
         igstAmount: totals.igstAmount,
         grandTotal: totals.grandTotal,
-        terms_from_date: totals.terms_from_date,
-        terms_to_date: totals.terms_to_date,
+        terms_from_date: form.terms_from_date,
+        terms_to_date: form.terms_to_date,
       },
     ]);
 
@@ -120,8 +120,8 @@ export async function PATCH(req: NextRequest) {
       sgstAmount: totals.sgstAmount,
       igstAmount: totals.igstAmount,
       grandTotal: totals.grandTotal,
-      terms_from_date: totals.terms_from_date,
-      terms_to_date: totals.terms_to_date,
+      terms_from_date: form.terms_from_date,
+      terms_to_date: form.terms_to_date,
     };
 
     const { error } = await supabase

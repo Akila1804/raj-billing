@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Plus,
   Eye,
@@ -71,14 +71,6 @@ export default function InvoicePage({ invoice }: InvoiceInterface) {
       );
     });
   }, [search, year, month, fromDate, toDate, invoice]);
-
-  useEffect(() => {
-    const session = sessionStorage.getItem("adminToken");
-
-    if (!session) {
-      router.push("/");
-    }
-  }, []);
 
   const totalCount = invoice.length;
   const totalAmount = invoice.reduce((sum, item) => sum + item.grandTotal, 0);

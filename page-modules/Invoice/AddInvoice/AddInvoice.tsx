@@ -38,7 +38,6 @@ export default function AddInvoice() {
   useEffect(() => {
     const loadNumber = async () => {
       const nextEstNo = await generateInvoiceNumber();
-      console.log("nextEstNo", nextEstNo);
       setForm((prev) => ({
         ...prev,
         invoiceNo: nextEstNo,
@@ -46,14 +45,6 @@ export default function AddInvoice() {
     };
 
     loadNumber();
-  }, []);
-
-  useEffect(() => {
-    const session = sessionStorage.getItem("adminToken");
-
-    if (!session) {
-      router.push("/");
-    }
   }, []);
 
   const handleProductChange = (
@@ -316,7 +307,7 @@ export default function AddInvoice() {
                         <input
                           type="number"
                           min="0"
-                          step="0.01"
+                          step="1"
                           className="w-full h-15 px-2 py-2 text-right border border-gray-200 rounded-lg focus:outline-none"
                           value={product.qty}
                           onChange={(e) =>

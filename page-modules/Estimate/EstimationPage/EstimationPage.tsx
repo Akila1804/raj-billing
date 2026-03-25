@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Plus,
   Eye,
@@ -70,14 +70,6 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
       );
     });
   }, [search, year, month, fromDate, toDate, estimate]);
-
-  useEffect(() => {
-    const session = sessionStorage.getItem("adminToken");
-
-    if (!session) {
-      router.push("/");
-    }
-  }, []);
 
   const totalCount = estimate.length;
   const totalAmount = estimate.reduce((sum, item) => sum + item.grandTotal, 0);

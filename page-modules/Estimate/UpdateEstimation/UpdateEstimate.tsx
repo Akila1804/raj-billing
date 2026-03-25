@@ -63,7 +63,6 @@ const UpdateEstimate = () => {
               ? JSON.parse(estimate.products)
               : estimate.products || [],
           );
-          console.log("Estimate", estimate);
         } catch (error) {
           console.error("Error fetching Estimate data:", error);
         }
@@ -72,14 +71,6 @@ const UpdateEstimate = () => {
       fetchEstimateData();
     }
   }, [id]);
-
-  useEffect(() => {
-    const session = sessionStorage.getItem("adminToken");
-
-    if (!session) {
-      router.push("/");
-    }
-  }, []);
 
   const handleProductChange = (
     index: number,
@@ -148,7 +139,6 @@ const UpdateEstimate = () => {
         text: "Estimation updated successfully",
       });
       router.push(ESTIMATION);
-      console.log("Update response:", res.data);
     } catch (error) {
       console.error(error);
       setloading(false);
@@ -332,7 +322,7 @@ const UpdateEstimate = () => {
                         <input
                           type="number"
                           min="0"
-                          step="0.01"
+                          step="1"
                           className="w-full h-15 px-2 py-2 text-right border border-gray-200 rounded-lg focus:outline-none"
                           value={product.qty}
                           onChange={(e) =>

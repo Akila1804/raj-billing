@@ -6,7 +6,6 @@ export const generateVocherNumber = async () => {
     .select("voucher_id")
     .order("voucher_id", { ascending: false })
     .limit(1);
-  console.log("lastNumber", data);
 
   if (error) {
     console.error(error);

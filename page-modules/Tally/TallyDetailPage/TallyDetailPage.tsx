@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { supabase } from "@/lib/supabase";
 import Swal from "sweetalert2";
@@ -12,6 +12,7 @@ import { TALLY } from "@/constants/path";
 import { Entry, Member } from "@/types/tally";
 
 export default function LedgerPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -46,7 +47,6 @@ export default function LedgerPage() {
 
   const loadNumber = async () => {
     const nextEstNo = await generateVocherNumber();
-    console.log("nextEstNo", nextEstNo);
     setForm((prev) => ({
       ...prev,
       voucher_id: nextEstNo,
@@ -73,11 +73,7 @@ export default function LedgerPage() {
             params: { customer_no: id },
           });
           const voucher = responseData.data;
-
-          console.log(voucher);
           setEntries(voucher);
-
-          console.log("Members", voucher);
         } catch (error) {
           console.error("Error fetching Members data:", error);
         }

@@ -36,6 +36,9 @@ const PreviewEstimate = () => {
     packing: 0,
     cgst: 9,
     sgst: 9,
+    igst: 0,
+    terms_from_date: 0,
+    terms_to_date: 0,
   });
 
   const [products, setProducts] = useState([
@@ -63,6 +66,9 @@ const PreviewEstimate = () => {
             packing: estimate.packing,
             cgst: estimate.cgst_percent,
             sgst: estimate.sgst_percent,
+            igst: estimate.igst_percent,
+            terms_from_date: estimate.terms_from_date,
+            terms_to_date: estimate.terms_to_date,
           });
 
           setProducts(
@@ -79,19 +85,13 @@ const PreviewEstimate = () => {
     }
   }, [id]);
 
-  useEffect(() => {
-    const session = sessionStorage.getItem("adminToken");
-
-    if (!session) {
-      router.push("/");
-    }
-  }, []);
-
   const subTotal = products.reduce((sum, p) => sum + p.amount, 0);
   const taxableAmount = subTotal + Number(form.packing);
   const cgstAmount = (taxableAmount * form.cgst) / 100;
   const sgstAmount = (taxableAmount * form.sgst) / 100;
-  const grandTotal = taxableAmount + cgstAmount + sgstAmount;
+  const igstAmount = (taxableAmount * form.igst) / 100;
+
+  const grandTotal = taxableAmount + cgstAmount + sgstAmount + igstAmount;
 
   const amountInWords = numberToWords(Math.round(grandTotal));
 
@@ -436,10 +436,11 @@ const PreviewEstimate = () => {
               <div className="list-disc text-[10px] text-black pt-1 pl-2">
                 Design Your&apos;s Scope. GST Extra. Freight Charge. Extra 100%
                 Advance Will be accompained while placing the order. The good
-                delivery with in <span className="text-[#f00]"> _ </span>to{" "}
-                <span className="text-[#f00]"> _ </span> days. Goods once sold
-                will not be taken back or exchanged. Delivery subject to stock
-                availability.
+                delivery with in{" "}
+                <span className="text-[#f00]"> {form.terms_from_date} </span>to{" "}
+                <span className="text-[#f00]"> {form.terms_to_date} </span>{" "}
+                days. Goods once sold will not be taken back or exchanged.
+                Delivery subject to stock availability.
               </div>
             </div>
             {/* Bank Details */}

@@ -6,7 +6,6 @@ export const generateInvoiceNumber = async () => {
     .select("invoiceNo")
     .order("invoiceNo", { ascending: false })
     .limit(1);
-  console.log("lastNumber", data);
 
   if (error) {
     console.error(error);

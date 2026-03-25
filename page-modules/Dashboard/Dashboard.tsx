@@ -3,21 +3,11 @@ import Image from "next/image";
 import { Calculator, FileText, LogOut } from "lucide-react";
 import Link from "next/link";
 import { ESTIMATION, INVOICE, TALLY } from "@/constants/path";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
 const Dashboard = () => {
   const router = useRouter();
-
-  // 🔐 Protect Route
-  useEffect(() => {
-    const session = sessionStorage.getItem("adminToken");
-
-    if (!session) {
-      router.replace("/");
-    }
-  }, [router]);
 
   // 🚪 Logout Function
   const handleLogout = () => {
@@ -28,9 +18,12 @@ const Dashboard = () => {
       showCancelButton: true,
       confirmButtonText: "Yes, Logout",
       confirmButtonColor: "#ef4444",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        sessionStorage.removeItem("adminToken");
+        await fetch("/api/logout", {
+          method: "POST",
+        });
+
         router.replace("/");
       }
     });

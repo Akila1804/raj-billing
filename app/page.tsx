@@ -28,12 +28,28 @@ export default function LoginPage() {
     setIsLoading(true);
     setError("");
 
-    if (form.username === "rajprinters" && form.password === "raj@123") {
-      sessionStorage.setItem("adminToken", "authenticated");
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error);
+      }
+
+      // ✅ Cookie is already set by API
       router.push(DASHBOARD);
-    } else {
-      setError("Invalid email or password");
+    } catch (err: unknown) {
+      setError("Invalid username or password");
     }
+
+    setIsLoading(false);
   };
 
   return (
