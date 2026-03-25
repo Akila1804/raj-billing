@@ -94,7 +94,7 @@ export async function GET(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
-    const { id, form, products, totals } = body;
+    const { id, form, products, totals, convert_invoice } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -103,26 +103,36 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    const updateData = {
-      customerName: form.customerName,
-      phone: form.phone,
-      city: form.city,
-      address: form.address,
-      gst: form.gst,
-      packing: form.packing,
-      date: form.date,
-      products: products,
-      cgst_percent: form.cgst,
-      sgst_percent: form.sgst,
-      igst_percent: form.igst,
-      subTotal: totals.subTotal,
-      cgstAmount: totals.cgstAmount,
-      sgstAmount: totals.sgstAmount,
-      igstAmount: totals.igstAmount,
-      grandTotal: totals.grandTotal,
-      terms_from_date: form.terms_from_date,
-      terms_to_date: form.terms_to_date,
-    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let updateData: any = {};
+
+    // ✅ If only convert_invoice is sent
+    if (convert_invoice !== undefined && !form) {
+      updateData.convert_invoice = convert_invoice;
+    } else {
+      // ✅ Full update
+      updateData = {
+        customerName: form.customerName,
+        phone: form.phone,
+        city: form.city,
+        address: form.address,
+        gst: form.gst,
+        packing: form.packing,
+        date: form.date,
+        products: products,
+        cgst_percent: form.cgst,
+        sgst_percent: form.sgst,
+        igst_percent: form.igst,
+        subTotal: totals.subTotal,
+        cgstAmount: totals.cgstAmount,
+        sgstAmount: totals.sgstAmount,
+        igstAmount: totals.igstAmount,
+        grandTotal: totals.grandTotal,
+        terms_from_date: form.terms_from_date,
+        terms_to_date: form.terms_to_date,
+        convert_invoice: convert_invoice,
+      };
+    }
 
     const { error } = await supabase
       .from("estimate")

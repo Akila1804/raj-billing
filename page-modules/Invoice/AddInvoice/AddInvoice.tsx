@@ -6,14 +6,17 @@ import { ArrowLeftIcon, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { generateInvoiceNumber } from "./generateInvoiceNo";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import Link from "next/link";
 import { INVOICE } from "@/constants/path";
 
 export default function AddInvoice() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setloading] = useState(false);
+  const [sourceEstimateNo, setSourceEstimateNo] = useState("");
+
   const [products, setProducts] = useState([
     { id: Date.now(), name: "", qty: 0, rate: 0, amount: 0 },
   ]);
@@ -34,18 +37,63 @@ export default function AddInvoice() {
     terms_to_date: 0,
   });
 
-  // Generate unique estimation number
   useEffect(() => {
-    const loadNumber = async () => {
-      const nextEstNo = await generateInvoiceNumber();
-      setForm((prev) => ({
-        ...prev,
-        invoiceNo: nextEstNo,
-      }));
+    const loadInvoiceData = async () => {
+      const nextInvoiceNo = await generateInvoiceNumber();
+      const fromEstimate = searchParams.get("fromEstimate");
+
+      if (!fromEstimate) {
+        setForm((prev) => ({
+          ...prev,
+          invoiceNo: nextInvoiceNo,
+        }));
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/estimate?id=${fromEstimate}`);
+        const estimate = await res.json();
+
+        if (!res.ok) {
+          throw new Error(estimate.error || "Failed to fetch estimate");
+        }
+
+        setSourceEstimateNo(estimate.estimationNo || fromEstimate);
+        setForm((prev) => ({
+          ...prev,
+          invoiceNo: nextInvoiceNo,
+          customerName: estimate.customerName || "",
+          address: estimate.address || "",
+          gst: estimate.gst || "",
+          phone: estimate.phone || "",
+          city: estimate.city || "",
+          date: estimate.date ? String(estimate.date).split("T")[0] : prev.date,
+          packing: estimate.packing ?? 0,
+          cgst: estimate.cgst_percent ?? 9,
+          sgst: estimate.sgst_percent ?? 9,
+          igst: estimate.igst_percent ?? 0,
+          terms_from_date: estimate.terms_from_date ?? 0,
+          terms_to_date: estimate.terms_to_date ?? 0,
+        }));
+        setProducts(
+          typeof estimate.products === "string"
+            ? JSON.parse(estimate.products)
+            : estimate.products || [
+                { id: Date.now(), name: "", qty: 0, rate: 0, amount: 0 },
+              ],
+        );
+      } catch (error) {
+        console.error("Error loading estimate for invoice conversion:", error);
+        setForm((prev) => ({
+          ...prev,
+          invoiceNo: nextInvoiceNo,
+        }));
+        Swal.fire("Could not load quotation details for conversion");
+      }
     };
 
-    loadNumber();
-  }, []);
+    loadInvoiceData();
+  }, [searchParams]);
 
   const handleProductChange = (
     index: number,
@@ -82,13 +130,12 @@ export default function AddInvoice() {
   const igstAmount = (taxableAmount * form.igst) / 100;
 
   const grandTotal = taxableAmount + cgstAmount + sgstAmount + igstAmount;
-
+  console.log("sourceEstimateNo", sourceEstimateNo);
   const handleSave = async () => {
     if (
       !form.customerName.trim() ||
       !form.phone.trim() ||
       !form.city.trim() ||
-      !form.address.trim() ||
       !form.terms_from_date ||
       !form.terms_to_date
     ) {
@@ -129,6 +176,24 @@ export default function AddInvoice() {
 
       if (!res.ok) {
         throw new Error(result.error);
+      }
+      console.log("sourceEstimateNo", sourceEstimateNo);
+      // ✅ 2. PATCH Estimate (ONLY if converted)
+      if (sourceEstimateNo) {
+        console.log("test", {
+          id: sourceEstimateNo,
+          convert_invoice: true,
+        });
+        await fetch("/api/estimate", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: sourceEstimateNo,
+            convert_invoice: true,
+          }),
+        });
       }
 
       Swal.fire(
@@ -176,6 +241,11 @@ export default function AddInvoice() {
               className="w-full px-4 py-3 bg-indigo-50 border border-indigo-200 rounded-xl font-mono font-semibold text-lg cursor-not-allowed"
               value={form.invoiceNo}
             />
+            {sourceEstimateNo && (
+              <p className="mt-2 text-sm text-orange-600 font-medium">
+                Converted from quotation: {sourceEstimateNo}
+              </p>
+            )}
           </div>
           {/* Customer Details Card */}
           <div className="grid md:grid-cols-3 gap-6 my-10 p-8  rounded-2xl border border-indigo-100">
@@ -246,7 +316,7 @@ export default function AddInvoice() {
 
             <div className="md:col-span-3 space-y-2">
               <label className="block text-sm font-semibold text-gray-700">
-                Address <span className="text-red-700 pb-2">*</span>
+                Address
               </label>
               <textarea
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none duration-200 shadow-sm resize-vertical min-h-[100px]"

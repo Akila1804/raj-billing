@@ -101,7 +101,6 @@ const UpdateInvoice = () => {
       !form.customerName.trim() ||
       !form.phone.trim() ||
       !form.city.trim() ||
-      !form.address.trim() ||
       !form.terms_from_date ||
       !form.terms_to_date
     ) {
@@ -118,7 +117,7 @@ const UpdateInvoice = () => {
     }
     setloading(true);
     try {
-      const res = await axios.patch("/api/invoice", {
+      await axios.patch("/api/invoice", {
         id,
         form,
         products,
@@ -256,7 +255,7 @@ const UpdateInvoice = () => {
 
             <div className="md:col-span-3 space-y-2">
               <label className="block text-sm font-semibold text-gray-700">
-                Address <span className="text-red-700 pb-2">*</span>
+                Address
               </label>
               <textarea
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none duration-200 shadow-sm resize-vertical min-h-[100px]"
