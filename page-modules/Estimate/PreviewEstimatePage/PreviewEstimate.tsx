@@ -286,7 +286,7 @@ const PreviewEstimate = () => {
               <table className="w-full border-collapse border rounded-lg border-black text-sm">
                 <thead>
                   <tr className=" text-black">
-                    <th className="border border-black p-2 text-center font-bold">
+                    <th className="border border-black p-2 text-center font-bold rounded-tl-lg">
                       No
                     </th>
                     <th className="border border-black p-2 text-left font-bold">
@@ -298,31 +298,44 @@ const PreviewEstimate = () => {
                     <th className="border border-black p-2 text-center font-bold">
                       Rate
                     </th>
-                    <th className="border border-black p-2 text-right font-bold">
+                    <th className="border border-black p-2 text-right font-bold rounded-tr-lg">
                       Total
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((p, index) => (
-                    <tr key={p.id}>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1.5 text-center font-medium">
-                        {index + 1}
-                      </td>
-                      <td className=" border border-[#b4b4b4] p-0.5 mb-1.5 pb-1.5 font-medium break-all max-w-[300px]">
-                        {p.name}
-                      </td>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1.5 pb-1.5 text-center font-medium">
-                        {p.qty}
-                      </td>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1.5 pb-1.5 text-right font-medium">
-                        ₹ {p.rate.toLocaleString()}
-                      </td>
-                      <td className="border border-[#b4b4b4] p-0.5 mb-1.5 pb-1.5 text-right font-bold text-base">
-                        ₹ {p.amount.toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
+                  {products.map((p, index) => {
+                    const isLastRow = index === products.length - 1;
+                    return (
+                      <tr key={p.id}>
+                        <td
+                          className={`border border-[#b4b4b4] p-0.5 mb-1.5 text-center font-medium ${isLastRow ? "rounded-bl-lg" : ""}`}
+                        >
+                          {index + 1}
+                        </td>
+                        <td
+                          className={`border border-[#b4b4b4] p-0.5 mb-1.5 pb-1.5 font-medium break-all max-w-[300px] ${isLastRow ? "" : ""}`}
+                        >
+                          {p.name}
+                        </td>
+                        <td
+                          className={`border border-[#b4b4b4] p-0.5 mb-1.5 pb-1.5 text-center font-medium ${isLastRow ? "" : ""}`}
+                        >
+                          {p.qty}
+                        </td>
+                        <td
+                          className={`border border-[#b4b4b4] p-0.5 mb-1.5 pb-1.5 text-right font-medium ${isLastRow ? "" : ""}`}
+                        >
+                          ₹ {p.rate.toLocaleString()}
+                        </td>
+                        <td
+                          className={`border border-[#b4b4b4] p-0.5 mb-1.5 pb-1.5 text-right font-bold text-base ${isLastRow ? "rounded-br-lg" : ""}`}
+                        >
+                          ₹ {p.amount.toLocaleString()}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -381,7 +394,7 @@ const PreviewEstimate = () => {
                 <div className="grid grid-cols-3 gap-6 text-sm mt-2">
                   {/* Bank Account 1 */}
                   <div className="space-y-1">
-                    <p className="font-bold text-md">Bank Account 1</p>
+                    <p className="font-bold text-sm">Bank Account 1</p>
                     <p>
                       <strong>Bank:</strong> {BANK_NAME}
                     </p>
@@ -398,7 +411,7 @@ const PreviewEstimate = () => {
 
                   {/* Bank Account 2 */}
                   <div className="space-y-1">
-                    <p className="font-bold text-md">Bank Account 2</p>
+                    <p className="font-bold text-sm">Bank Account 2</p>
                     <p>
                       <strong>Bank:</strong> {BANK_NAME_2}
                     </p>
@@ -434,13 +447,12 @@ const PreviewEstimate = () => {
                 Terms & Conditions
               </h3>
               <div className="list-disc text-[10px] text-black pt-1 pl-2">
-                Design Your&apos;s Scope. GST Extra. Freight Charge. Extra 100%
-                Advance Will be accompained while placing the order. The good
+                Design Your&apos;s Scope, GST Extra, Freight Charge, Extra 100%
+                Advance Will be accompained while placing the order, The good
                 delivery with in{" "}
                 <span className="text-[#f00]"> {form.terms_from_date} </span>to{" "}
                 <span className="text-[#f00]"> {form.terms_to_date} </span>{" "}
-                days. Goods once sold will not be taken back or exchanged.
-                Delivery subject to stock availability.
+                days, Goods once sold will not be taken back or exchanged.
               </div>
             </div>
             {/* Bank Details */}

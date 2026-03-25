@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 import Swal from "sweetalert2";
 import { generateVocherNumber } from "./generateVoucherNo";
 import Link from "next/link";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, Download } from "lucide-react";
 import { TALLY } from "@/constants/path";
 import { Entry, Member } from "@/types/tally";
 
@@ -214,10 +214,14 @@ export default function LedgerPage() {
       <div className="bg-white border-b shadow-sm flex justify-between items-center px-6 py-2">
         <Image src="/logo.png" alt="Logo" width={200} height={60} />
       </div>
-      <div className=" pl-10 pt-5">
+      <div className=" px-10 pt-5 flex justify-between">
         <Link href={TALLY} className="text-red-700 flex gap-3 items-center">
           <ArrowLeftIcon /> Go Back
         </Link>
+        <button className="flex items-center gap-2 cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition  ">
+          <Download size={20} />
+          Download
+        </button>
       </div>
       <div className="max-w-7xl mx-auto px-6 py-6">
         {/* 📊 DASHBOARD */}
