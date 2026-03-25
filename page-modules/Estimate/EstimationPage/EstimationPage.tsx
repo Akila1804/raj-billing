@@ -7,10 +7,12 @@ import {
   BarChart3,
   TrendingUp,
   ArrowLeftFromLineIcon,
+  FileText,
 } from "lucide-react";
 import Image from "next/image";
 import {
   ADD_ESTIMATION,
+  ADD_INVOICE,
   DASHBOARD,
   PREVIEW_ESTIMATION,
   UPDATE_ESTIMATION,
@@ -252,6 +254,10 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
             )}
           </div>
         </div>
+        <div className="flex gap-2 text-sm">
+          <span className="text-red-600 text-2xl">*</span>{" "}
+          <p>(Estimate Converted to Inoice)</p>
+        </div>
         {/* Table */}
         <div className="bg-white  rounded-xl overflow-hidden shadow-sm">
           <div className="md:w-full w-screen overflow-x-auto">
@@ -284,7 +290,14 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
                 )}
                 {paginatedProducts.map((item, index) => (
                   <tr key={item.id} className="border-t hover:bg-gray-50">
-                    <td className="p-3">{index + 1}</td>
+                    <td className="p-3">
+                      {index + 1}{" "}
+                      {item.convert_invoice ? (
+                        <span className="text-red-600 text-2xl">*</span>
+                      ) : (
+                        ""
+                      )}
+                    </td>
 
                     <td className="p-3 font-medium text-blue-600">
                       {item.estimationNo}
@@ -327,6 +340,22 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
                         >
                           <Pencil size={16} className="text-green-600" />
                         </button>
+
+                        {item.convert_invoice ? (
+                          ""
+                        ) : (
+                          <button
+                            className="p-2 hover:bg-orange-100 rounded cursor-pointer"
+                            onClick={() =>
+                              router.push(
+                                `${ADD_INVOICE}?fromEstimate=${item.estimationNo}`,
+                              )
+                            }
+                            title="Convert to Invoice"
+                          >
+                            <FileText size={16} className="text-orange-600" />
+                          </button>
+                        )}
 
                         {/* <button className="p-2 hover:bg-red-100 rounded">
                         <Trash2 size={16} className="text-red-600" />

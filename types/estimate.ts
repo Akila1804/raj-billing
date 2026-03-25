@@ -28,4 +28,5 @@ export interface Estimate {
   created_at: string;
   terms_from_date: number;
   terms_to_date: number;
+  convert_invoice: boolean;
 }
