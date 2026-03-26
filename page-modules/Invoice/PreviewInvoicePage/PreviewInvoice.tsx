@@ -5,7 +5,6 @@ import { Download, ArrowLeftIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { numberToWords } from "./NumberToWords";
 import Link from "next/link";
@@ -95,9 +94,11 @@ const PreviewInvoice = () => {
 
   const amountInWords = numberToWords(Math.round(grandTotal));
 
-  const downloadImage = async () => {
+  const downloadJPG = async () => {
     if (!invoiceRef.current) return;
+
     const images = invoiceRef.current.querySelectorAll("img");
+
     await Promise.all(
       Array.from(images).map(
         (img) =>
@@ -107,31 +108,18 @@ const PreviewInvoice = () => {
           }),
       ),
     );
+
     const canvas = await html2canvas(invoiceRef.current, {
-      scale: 3, // increase scale for better quality
+      scale: 3, // high quality
       useCORS: true,
       backgroundColor: "#ffffff",
     });
 
-    const imgData = canvas.toDataURL("image/jpeg", 0.7); // compress image
-
-    const pdf = new jsPDF({
-      orientation: "p",
-      unit: "mm",
-      format: "a4",
-      compress: true,
-    });
-
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
-
-    const blob = pdf.output("blob");
+    const imgData = canvas.toDataURL("image/jpeg", 0.9); // better quality JPG
 
     const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = form.invoiceNo;
+    link.href = imgData;
+    link.download = `${form.invoiceNo}.jpg`;
     link.click();
   };
 
@@ -504,8 +492,8 @@ const PreviewInvoice = () => {
       </div>
       <div className="fixed bottom-8 right-8 z-10">
         <button
-          className="flex items-center gap-2 cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition  "
-          onClick={downloadImage}
+          onClick={downloadJPG}
+          className="flex items-center gap-2 cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition"
         >
           <Download size={20} />
           Download Image

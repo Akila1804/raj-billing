@@ -10,11 +10,17 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import Link from "next/link";
 import { INVOICE } from "@/constants/path";
+import { Invoice } from "@/types/invoice";
 
-export default function AddInvoice() {
+interface InvoiceInterface {
+  invoice: Invoice[];
+}
+
+export default function AddInvoice({ invoice }: InvoiceInterface) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setloading] = useState(false);
+  const [frequentCustomers, setFrequentCustomers] = useState<Invoice[]>([]);
   const [sourceEstimateNo, setSourceEstimateNo] = useState("");
 
   const [products, setProducts] = useState([
@@ -36,6 +42,10 @@ export default function AddInvoice() {
     terms_from_date: 0,
     terms_to_date: 0,
   });
+
+  useEffect(() => {
+    setFrequentCustomers(invoice);
+  }, [invoice]);
 
   useEffect(() => {
     const loadInvoiceData = async () => {
@@ -325,6 +335,41 @@ export default function AddInvoice() {
                 required
                 onChange={(e) => setForm({ ...form, address: e.target.value })}
               />
+            </div>
+            <div className="col-span-3">
+              {frequentCustomers.length > 0 && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-500 mb-2">Recent Customers</p>
+
+                  <div className="flex flex-wrap gap-2">
+                    {frequentCustomers.map((c, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => {
+                          setForm({
+                            ...form,
+                            customerName: c.customerName,
+                            phone: c.phone,
+                            gst: c.gst,
+                            address: c.address,
+                            city: c.city,
+                          });
+                        }}
+                        className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm shadow-sm border"
+                      >
+                        {/* Icon circle */}
+                        <span className="w-5 h-5 flex items-center justify-center bg-gray-300 rounded-full text-xs">
+                          👤
+                        </span>
+
+                        {/* Name */}
+                        <span className="font-medium">{c.customerName}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
