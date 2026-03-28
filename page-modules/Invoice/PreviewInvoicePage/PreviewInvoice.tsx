@@ -359,6 +359,10 @@ const PreviewInvoice = () => {
                     <span>SGST ({form.sgst}%)</span>
                     <span>₹ {sgstAmount}</span>
                   </div>
+                  <div className="flex justify-between text-[10px]">
+                    <span>IGST ({form.igst}%)</span>
+                    <span>₹ {igstAmount}</span>
+                  </div>
                   <div className="border-t pt-2">
                     <div className="flex justify-between text-lg font-bold text-black mb-2">
                       <span>Amount Chargeable</span>
