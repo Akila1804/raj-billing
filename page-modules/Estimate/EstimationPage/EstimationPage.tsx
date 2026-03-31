@@ -20,6 +20,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Estimate } from "@/types/estimate";
 import Link from "next/link";
+import { toTitleCase } from "@/constants/function";
 
 interface EstimationInterface {
   estimate: Estimate[];
@@ -303,7 +304,9 @@ export default function EstimationPage({ estimate }: EstimationInterface) {
                       {item.estimationNo}
                     </td>
 
-                    <td className="p-3 text-gray-600">{item.customerName}</td>
+                    <td className="p-3 text-gray-600 capitalize">
+                      {toTitleCase(item.customerName)}
+                    </td>
 
                     <td className="p-3 font-semibold text-emerald-600">
                       ₹{item.grandTotal.toLocaleString()}

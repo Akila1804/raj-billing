@@ -3,7 +3,7 @@
 import axios from "axios";
 import { Download, ArrowLeftIcon } from "lucide-react";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import html2canvas from "html2canvas";
 import { numberToWords } from "./NumberToWords";
@@ -17,9 +17,9 @@ import {
   IFSC_CODE,
   IFSC_CODE_2,
 } from "@/constants/data";
+import { toTitleCase } from "@/constants/function";
 
 const PreviewEstimate = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const invoiceRef = useRef<HTMLDivElement>(null);
@@ -281,7 +281,7 @@ const PreviewEstimate = () => {
                   </p>
 
                   <p>
-                    <strong>Name:</strong> {form.customerName}
+                    <strong>Name:</strong> {toTitleCase(form.customerName)}
                   </p>
                   <p>
                     <strong>Address:</strong> {form.address}
@@ -344,7 +344,7 @@ const PreviewEstimate = () => {
                         <td
                           className={`border border-[#b4b4b4] p-0.5 mb-1.5 pb-1.5 font-medium break-all max-w-[300px] ${isLastRow ? "" : ""}`}
                         >
-                          {p.name}
+                          {toTitleCase(p.name)}
                         </td>
                         <td
                           className={`border border-[#b4b4b4] p-0.5 mb-1.5 pb-1.5 text-center font-medium ${isLastRow ? "" : ""}`}
@@ -511,7 +511,12 @@ const PreviewEstimate = () => {
                   <p>Bank Transfer / Cash / UPI</p>
                 </div> */}
                 <div className="text-right">
-                  <div className="h-20   flex items-end justify-center mb-1">
+                  <img
+                    src="/sign.jpeg"
+                    alt="Logo"
+                    className="block h-11 w-auto object-contain align-middle"
+                  />
+                  <div className="flex items-end justify-center mb-1">
                     <span className="bg-white px-2 border-dashed border-black border-t">
                       Authorized Signature
                     </span>

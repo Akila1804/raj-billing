@@ -19,6 +19,7 @@ import {
   PREVIEW_INVOICE,
   UPDATE_INVOICE,
 } from "@/constants/path";
+import { toTitleCase } from "@/constants/function";
 
 interface InvoiceInterface {
   invoice: Invoice[];
@@ -292,7 +293,10 @@ export default function InvoicePage({ invoice }: InvoiceInterface) {
                       {item.invoiceNo}
                     </td>
 
-                    <td className="p-3 text-gray-600">{item.customerName}</td>
+                    <td className="p-3 text-gray-600">
+                      {" "}
+                      {toTitleCase(item.customerName)}
+                    </td>
 
                     <td className="p-3 font-semibold text-emerald-600">
                       ₹{item.grandTotal.toLocaleString()}

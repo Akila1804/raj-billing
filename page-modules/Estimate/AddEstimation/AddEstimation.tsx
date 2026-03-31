@@ -273,7 +273,11 @@ export default function AddEstimation({ estimate }: EstimationInterface) {
                   <p className="text-sm text-gray-500 mb-2">Recent Customers</p>
 
                   <div className="flex flex-wrap gap-2">
-                    {frequentCustomers.map((c, i) => (
+                    {Array.from(
+                      new Map(
+                        frequentCustomers.map((c) => [c.customerName, c]),
+                      ).values(),
+                    ).map((c, i) => (
                       <button
                         key={i}
                         type="button"
@@ -289,12 +293,10 @@ export default function AddEstimation({ estimate }: EstimationInterface) {
                         }}
                         className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm shadow-sm border"
                       >
-                        {/* Icon circle */}
                         <span className="w-5 h-5 flex items-center justify-center bg-gray-300 rounded-full text-xs">
                           👤
                         </span>
 
-                        {/* Name */}
                         <span className="font-medium">{c.customerName}</span>
                       </button>
                     ))}
