@@ -27,6 +27,7 @@ const TallyPage = ({ members, voucher }: MembersInterface) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [openModal, setOpenModal] = useState(false);
   const [loading, setloading] = useState(false);
+  const [balanceSort, setBalanceSort] = useState<"asc" | "desc" | null>(null);
   // Edit
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
@@ -73,6 +74,26 @@ const TallyPage = ({ members, voucher }: MembersInterface) => {
     return map;
   }, [voucher]);
 
+  const sortedData = useMemo(() => {
+    const result = [...filteredData];
+
+    if (balanceSort) {
+      result.sort((a, b) => {
+        const aSummary = summaryMap[a.customer_no] || { debit: 0, credit: 0 };
+        const bSummary = summaryMap[b.customer_no] || { debit: 0, credit: 0 };
+
+        const aBalance = aSummary.debit - aSummary.credit;
+        const bBalance = bSummary.debit - bSummary.credit;
+
+        return balanceSort === "asc"
+          ? aBalance - bBalance
+          : bBalance - aBalance;
+      });
+    }
+
+    return result;
+  }, [filteredData, balanceSort, summaryMap]);
+
   const totals = useMemo(() => {
     let debit = 0;
     let credit = 0;
@@ -94,7 +115,7 @@ const TallyPage = ({ members, voucher }: MembersInterface) => {
   }, [members]);
 
   const totalCount = filteredData.length;
-  const paginatedProducts = filteredData.slice(
+  const paginatedProducts = sortedData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
@@ -278,7 +299,32 @@ const TallyPage = ({ members, voucher }: MembersInterface) => {
                   <th className="p-3 text-left">Phone</th>
                   <th className="p-3 text-right">Total Debit</th>
                   <th className="p-3 text-right">Total Credit</th>
-                  <th className="p-3 text-right">Balance</th>
+                  <th className="p-3 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      Balance
+                      {/* Sort ASC */}
+                      <button
+                        onClick={() => setBalanceSort("asc")}
+                        className={`text-xs ${balanceSort === "asc" ? "text-blue-600" : "text-gray-400"}`}
+                      >
+                        ↑
+                      </button>
+                      {/* Sort DESC */}
+                      <button
+                        onClick={() => setBalanceSort("desc")}
+                        className={`text-xs ${balanceSort === "desc" ? "text-blue-600" : "text-gray-400"}`}
+                      >
+                        ↓
+                      </button>
+                      {/* Reset */}
+                      <button
+                        onClick={() => setBalanceSort(null)}
+                        className={`text-xs ${balanceSort === null ? "text-blue-600" : "text-gray-400"}`}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </th>
                   <th className="p-3 text-center">Actions</th>
                 </tr>
               </thead>
