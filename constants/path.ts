@@ -12,6 +12,12 @@ export const ADD_INVOICE = "/add-invoice";
 export const UPDATE_INVOICE = "/update-invoice";
 export const PREVIEW_INVOICE = "/preview-invoice";
 
+// Dummy Invoice
+export const DUMMY_INVOICE = "/dummy-invoice/dummyinvoice";
+export const ADD_DUMMY_INVOICE = "/dummy-invoice/add-duminvoice";
+export const UPDATE_DUMMY_INVOICE = "/dummy-invoice/update-duminvoice";
+export const PREVIEW_DUMMY_INVOICE = "/dummy-invoice/preview-duminvoice";
+
 // Tally
 export const TALLY = "/tally";
 export const TALLY_DETAILS = "/tally-details";

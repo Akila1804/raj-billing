@@ -1,26 +1,27 @@
 /* eslint-disable react-hooks/purity */
 "use client";
-
 import { useState, useEffect } from "react";
 import { ArrowLeftIcon, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Swal from "sweetalert2";
-import { generateInvoiceNumber } from "./generateInvoiceNo";
+import { generateDummyInvoiceNumber } from "./generateInvoiceNo";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Link from "next/link";
-import { INVOICE } from "@/constants/path";
-import { Invoice } from "@/types/invoice";
+import { DUMMY_INVOICE } from "@/constants/path";
+import { DummyInvoice } from "@/types/dummyInvoice";
 
-interface InvoiceInterface {
-  invoice: Invoice[];
+interface DummyInvoiceInterface {
+  invoice: DummyInvoice[];
 }
 
-export default function AddInvoice({ invoice }: InvoiceInterface) {
+export default function AddDummyInvoice({ invoice }: DummyInvoiceInterface) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setloading] = useState(false);
-  const [frequentCustomers, setFrequentCustomers] = useState<Invoice[]>([]);
+  const [frequentCustomers, setFrequentCustomers] = useState<DummyInvoice[]>(
+    [],
+  );
   const [sourceEstimateNo, setSourceEstimateNo] = useState("");
 
   const [products, setProducts] = useState([
@@ -28,7 +29,7 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
   ]);
 
   const [form, setForm] = useState({
-    invoiceNo: "",
+    duminvoiceNo: "",
     customerName: "",
     address: "",
     gst: "",
@@ -49,13 +50,13 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
 
   useEffect(() => {
     const loadInvoiceData = async () => {
-      const nextInvoiceNo = await generateInvoiceNumber();
+      const nextInvoiceNo = await generateDummyInvoiceNumber();
       const fromEstimate = searchParams.get("fromEstimate");
 
       if (!fromEstimate) {
         setForm((prev) => ({
           ...prev,
-          invoiceNo: nextInvoiceNo,
+          duminvoiceNo: nextInvoiceNo,
         }));
         return;
       }
@@ -71,7 +72,7 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
         setSourceEstimateNo(estimate.estimationNo || fromEstimate);
         setForm((prev) => ({
           ...prev,
-          invoiceNo: nextInvoiceNo,
+          duminvoiceNo: nextInvoiceNo,
           customerName: estimate.customerName || "",
           address: estimate.address || "",
           gst: estimate.gst || "",
@@ -96,7 +97,7 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
         console.error("Error loading estimate for invoice conversion:", error);
         setForm((prev) => ({
           ...prev,
-          invoiceNo: nextInvoiceNo,
+          duminvoiceNo: nextInvoiceNo,
         }));
         Swal.fire("Could not load quotation details for conversion");
       }
@@ -169,7 +170,7 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
 
     setloading(true);
     try {
-      const res = await fetch("/api/invoice", {
+      const res = await fetch("/api/duminvoice", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -203,10 +204,10 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
 
       Swal.fire(
         "Successfully Added",
-        "Invoice added successfully! You can now view it in the products list.",
+        "Dummy Invoice added successfully! You can now view it in the products list.",
         "success",
       );
-      router.push(INVOICE);
+      router.push(DUMMY_INVOICE);
     } catch (error) {
       setloading(false);
       Swal.fire("Error saving invoice");
@@ -228,23 +229,26 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
         </div>
       </div>
       <div className="bg-white pl-10 pt-5">
-        <Link href={INVOICE} className="text-red-700 flex gap-3 items-center">
+        <Link
+          href={DUMMY_INVOICE}
+          className="text-red-700 flex gap-3 items-center"
+        >
           <ArrowLeftIcon /> Go Back
         </Link>
       </div>
       <div className="max-w-7xl mx-auto p-8 pt-0">
         <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/50">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent mb-8">
-            New Invoice
+            New Dummy Invoice
           </h1>
           <div className="space-y-4 md:col-span-2">
             <label className="block text-sm font-semibold text-gray-700">
-              Invoice No.
+              Dummy Invoice No.
             </label>
             <input
               readOnly
               className="w-full px-4 py-3 bg-indigo-50 border border-indigo-200 rounded-xl font-mono font-semibold text-lg cursor-not-allowed"
-              value={form.invoiceNo}
+              value={form.duminvoiceNo}
             />
             {sourceEstimateNo && (
               <p className="mt-2 text-sm text-orange-600 font-medium">
@@ -628,7 +632,7 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
           {/* Save Button */}
           <div className="mt-12 text-center flex gap-6 justify-center">
             <Link
-              href={INVOICE}
+              href={DUMMY_INVOICE}
               className="bg-gray-400 text-black px-12 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl  hover:-translate-y-1  duration-300"
             >
               Cancel

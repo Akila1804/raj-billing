@@ -1,0 +1,179 @@
+import { NextRequest, NextResponse } from "next/server";
+import { supabase } from "@/lib/supabase";
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { form, products, totals } = body;
+
+    // Insert product into Supabase table
+    const { error: insertError } = await supabase.from("dummy_invoice").insert([
+      {
+        duminvoiceNo: form.duminvoiceNo,
+        date: form.date,
+        customerName: form.customerName,
+        phone: form.phone,
+        city: form.city,
+        address: form.address,
+        gst: form.gst,
+        packing: form.packing,
+        cgst_percent: form.cgst,
+        sgst_percent: form.sgst,
+        igst_percent: form.igst,
+        products: products,
+        subTotal: totals.subTotal,
+        cgstAmount: totals.cgstAmount,
+        sgstAmount: totals.sgstAmount,
+        igstAmount: totals.igstAmount,
+        grandTotal: totals.grandTotal,
+        terms_from_date: form.terms_from_date,
+        terms_to_date: form.terms_to_date,
+      },
+    ]);
+
+    if (insertError) throw insertError;
+
+    return NextResponse.json(
+      { message: "Dummy Invoice saved successfully", success: true },
+      { status: 201 },
+    );
+  } catch (error) {
+    console.error("Error:", error);
+    return NextResponse.json(
+      { error: "Something went wrong" },
+      { status: 500 },
+    );
+  }
+}
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    // if (!id) {
+    //   return NextResponse.json(
+    //     { error: "Product ID is required" },
+    //     { status: 400 }
+    //   );
+    // }
+    let data, error;
+    if (id) {
+      ({ data, error } = await supabase
+        .from("dummy_invoice")
+        .select("*")
+        .eq("duminvoiceNo", id)
+        .single());
+    } else {
+      ({ data, error } = await supabase.from("dummy_invoice").select("*"));
+    }
+    if (error) {
+      console.error("Supabase error:", error);
+      return NextResponse.json(
+        { error: "Failed to fetch dummy invoice" },
+        { status: 500 },
+      );
+    }
+
+    if (!data) {
+      return NextResponse.json(
+        { error: "Dummy Invoice not found" },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json(data, { status: 200 });
+  } catch (error) {
+    console.error("GET Error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch Dummy Invoice" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { id, form, products, totals } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Dummy Invoice ID is required" },
+        { status: 400 },
+      );
+    }
+
+    const updateData = {
+      customerName: form.customerName,
+      phone: form.phone,
+      city: form.city,
+      address: form.address,
+      gst: form.gst,
+      packing: form.packing,
+      date: form.date,
+      products: products,
+      cgst_percent: form.cgst,
+      sgst_percent: form.sgst,
+      igst_percent: form.igst,
+      subTotal: totals.subTotal,
+      cgstAmount: totals.cgstAmount,
+      sgstAmount: totals.sgstAmount,
+      igstAmount: totals.igstAmount,
+      grandTotal: totals.grandTotal,
+      terms_from_date: form.terms_from_date,
+      terms_to_date: form.terms_to_date,
+    };
+
+    const { error } = await supabase
+      .from("dummy_invoice")
+      .update(updateData)
+      .eq("duminvoiceNo", id);
+
+    if (error) throw error;
+
+    return NextResponse.json(
+      { message: "Dummy Invoice updated successfully" },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("PATCH Error:", error);
+    return NextResponse.json(
+      { error: "Failed to update Dummy Invoice" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { id } = await req.json();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Dummy Invoice ID is required" },
+        { status: 400 },
+      );
+    }
+
+    const { error } = await supabase.from("invoice").delete().eq("id", id);
+
+    if (error) {
+      console.error("Supabase error:", error);
+      return NextResponse.json(
+        { error: "Failed to delete Invoice" },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Invoice deleted successfully" },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("DELETE Error:", error);
+    return NextResponse.json(
+      { error: "Failed to delete Invoice" },
+      { status: 500 },
+    );
+  }
+}

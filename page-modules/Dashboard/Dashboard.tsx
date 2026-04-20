@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Calculator, FileText, LogOut } from "lucide-react";
 import Link from "next/link";
-import { ESTIMATION, INVOICE, TALLY } from "@/constants/path";
+import { DUMMY_INVOICE, ESTIMATION, INVOICE, TALLY } from "@/constants/path";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
@@ -74,10 +74,17 @@ const Dashboard = () => {
       </div>
 
       {/* 📊 Tally */}
-      <div className="mt-10">
+      <div className="flex flex-col sm:flex-row gap-8 mt-10">
+        <Link
+          href={DUMMY_INVOICE}
+          className="group w-80 h-36 rounded-2xl bg-gradient-to-br from-gray-500 to-gray-600 text-white flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transition duration-300 hover:-translate-y-2"
+        >
+          <FileText size={34} className="group-hover:scale-110 transition" />
+          <span className="text-lg font-semibold">Dummy Invoice</span>
+        </Link>
         <Link
           href={TALLY}
-          className="group w-96 h-36 rounded-2xl bg-gradient-to-br from-rose-500 to-red-600 text-white flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transition duration-300 hover:-translate-y-2"
+          className="group w-80 h-36 rounded-2xl bg-gradient-to-br from-rose-500 to-red-600 text-white flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transition duration-300 hover:-translate-y-2"
         >
           <FileText size={34} className="group-hover:scale-110 transition" />
           <span className="text-lg font-semibold">Tally</span>

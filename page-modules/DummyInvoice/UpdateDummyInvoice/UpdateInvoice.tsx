@@ -1,38 +1,25 @@
 /* eslint-disable react-hooks/purity */
 "use client";
-
-import { useState, useEffect } from "react";
-import { ArrowLeftIcon, Plus, Trash2 } from "lucide-react";
-import Image from "next/image";
-import Swal from "sweetalert2";
-import { generateInvoiceNumber } from "./generateInvoiceNo";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-
+import Image from "next/image";
+import { ArrowLeftIcon, Plus, Trash2 } from "lucide-react";
+import Swal from "sweetalert2";
 import Link from "next/link";
-import { INVOICE } from "@/constants/path";
-import { Invoice } from "@/types/invoice";
+import { DUMMY_INVOICE } from "@/constants/path";
 
-interface InvoiceInterface {
-  invoice: Invoice[];
-}
-
-export default function AddInvoice({ invoice }: InvoiceInterface) {
+const UpdateDummyInvoice = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   const [loading, setloading] = useState(false);
-  const [frequentCustomers, setFrequentCustomers] = useState<Invoice[]>([]);
-  const [sourceEstimateNo, setSourceEstimateNo] = useState("");
-
-  const [products, setProducts] = useState([
-    { id: Date.now(), name: "", qty: 0, rate: 0, amount: 0 },
-  ]);
-
   const [form, setForm] = useState({
-    invoiceNo: "",
     customerName: "",
     address: "",
     gst: "",
     phone: "",
+    duminvoiceNo: "",
     city: "",
     date: new Date().toISOString().split("T")[0],
     packing: 0,
@@ -42,68 +29,46 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
     terms_from_date: 0,
     terms_to_date: 0,
   });
+  const [products, setProducts] = useState([
+    { id: Date.now(), name: "", qty: 0, rate: 0, amount: 0 },
+  ]);
 
   useEffect(() => {
-    setFrequentCustomers(invoice);
-  }, [invoice]);
-
-  useEffect(() => {
-    const loadInvoiceData = async () => {
-      const nextInvoiceNo = await generateInvoiceNumber();
-      const fromEstimate = searchParams.get("fromEstimate");
-
-      if (!fromEstimate) {
-        setForm((prev) => ({
-          ...prev,
-          invoiceNo: nextInvoiceNo,
-        }));
-        return;
-      }
-
-      try {
-        const res = await fetch(`/api/estimate?id=${fromEstimate}`);
-        const estimate = await res.json();
-
-        if (!res.ok) {
-          throw new Error(estimate.error || "Failed to fetch estimate");
+    if (id) {
+      const fetchInvoiceData = async () => {
+        try {
+          const response = await axios.get("/api/duminvoice", {
+            params: { id },
+          });
+          const invoice = response.data;
+          setForm({
+            customerName: invoice.customerName,
+            address: invoice.address,
+            gst: invoice.gst,
+            phone: invoice.phone,
+            duminvoiceNo: invoice.duminvoiceNo,
+            city: invoice.city,
+            date: invoice.date.split("T")[0],
+            packing: invoice.packing,
+            cgst: invoice.cgst_percent,
+            sgst: invoice.sgst_percent,
+            igst: invoice.igst_percent,
+            terms_from_date: invoice.terms_from_date,
+            terms_to_date: invoice.terms_to_date,
+          });
+          setProducts(
+            typeof invoice.products === "string"
+              ? JSON.parse(invoice.products)
+              : invoice.products || [],
+          );
+        } catch (error) {
+          console.error("Error fetching Invoice data:", error);
         }
+      };
 
-        setSourceEstimateNo(estimate.estimationNo || fromEstimate);
-        setForm((prev) => ({
-          ...prev,
-          invoiceNo: nextInvoiceNo,
-          customerName: estimate.customerName || "",
-          address: estimate.address || "",
-          gst: estimate.gst || "",
-          phone: estimate.phone || "",
-          city: estimate.city || "",
-          date: estimate.date ? String(estimate.date).split("T")[0] : prev.date,
-          packing: estimate.packing ?? 0,
-          cgst: estimate.cgst_percent ?? 9,
-          sgst: estimate.sgst_percent ?? 9,
-          igst: estimate.igst_percent ?? 0,
-          terms_from_date: estimate.terms_from_date ?? 0,
-          terms_to_date: estimate.terms_to_date ?? 0,
-        }));
-        setProducts(
-          typeof estimate.products === "string"
-            ? JSON.parse(estimate.products)
-            : estimate.products || [
-                { id: Date.now(), name: "", qty: 0, rate: 0, amount: 0 },
-              ],
-        );
-      } catch (error) {
-        console.error("Error loading estimate for invoice conversion:", error);
-        setForm((prev) => ({
-          ...prev,
-          invoiceNo: nextInvoiceNo,
-        }));
-        Swal.fire("Could not load quotation details for conversion");
-      }
-    };
-
-    loadInvoiceData();
-  }, [searchParams]);
+      fetchInvoiceData();
+    }
+  }, [id]);
 
   const handleProductChange = (
     index: number,
@@ -131,6 +96,53 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
     }
   };
 
+  const handleUpdateInvoice = async () => {
+    if (
+      !form.customerName.trim() ||
+      !form.phone.trim() ||
+      !form.city.trim() ||
+      !form.terms_from_date ||
+      !form.terms_to_date
+    ) {
+      Swal.fire("Please fill all required fields");
+      return;
+    }
+
+    const invalidProduct = products.find(
+      (p) => !p.name.trim() || p.qty <= 0 || p.rate <= 0,
+    );
+    if (invalidProduct) {
+      Swal.fire("Each product must have Name, Quantity and Rate");
+      return;
+    }
+    setloading(true);
+    try {
+      await axios.patch("/api/duminvoice", {
+        id,
+        form,
+        products,
+        totals: {
+          subTotal,
+          cgstAmount,
+          sgstAmount,
+          igstAmount,
+          grandTotal,
+        },
+      });
+
+      Swal.fire({
+        icon: "success",
+        title: "Updated",
+        text: "Invoice updated successfully",
+      });
+      router.push(DUMMY_INVOICE);
+    } catch (error) {
+      console.error(error);
+      setloading(false);
+      Swal.fire("Error updating invoice", "Please try again later", "error");
+    }
+  };
+
   const subTotal = products.reduce((sum, p) => sum + p.amount, 0);
 
   const taxableAmount = subTotal + Number(form.packing);
@@ -140,79 +152,6 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
   const igstAmount = (taxableAmount * form.igst) / 100;
 
   const grandTotal = taxableAmount + cgstAmount + sgstAmount + igstAmount;
-  const handleSave = async () => {
-    if (
-      !form.customerName.trim() ||
-      !form.phone.trim() ||
-      !form.city.trim() ||
-      !form.terms_from_date ||
-      !form.terms_to_date
-    ) {
-      Swal.fire("Please fill all required fields (marked with *)");
-      return;
-    }
-
-    // Product validation
-    const invalidProduct = products.find(
-      (p) => !p.name.trim() || p.qty <= 0 || p.rate <= 0,
-    );
-
-    if (invalidProduct) {
-      Swal.fire("Each product must have Name, Quantity and Rate");
-      return;
-    }
-
-    if (products.length === 0) {
-      Swal.fire("Add at least one product");
-      return;
-    }
-
-    setloading(true);
-    try {
-      const res = await fetch("/api/invoice", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          form,
-          products,
-          totals: { subTotal, cgstAmount, sgstAmount, igstAmount, grandTotal },
-        }),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        throw new Error(result.error);
-      }
-
-      // ✅ 2. PATCH Estimate (ONLY if converted)
-      if (sourceEstimateNo) {
-        await fetch("/api/estimate", {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: sourceEstimateNo,
-            convert_invoice: true,
-          }),
-        });
-      }
-
-      Swal.fire(
-        "Successfully Added",
-        "Invoice added successfully! You can now view it in the products list.",
-        "success",
-      );
-      router.push(INVOICE);
-    } catch (error) {
-      setloading(false);
-      Swal.fire("Error saving invoice");
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -228,29 +167,27 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
         </div>
       </div>
       <div className="bg-white pl-10 pt-5">
-        <Link href={INVOICE} className="text-red-700 flex gap-3 items-center">
+        <Link
+          href={DUMMY_INVOICE}
+          className="text-red-700 flex gap-3 items-center"
+        >
           <ArrowLeftIcon /> Go Back
         </Link>
       </div>
       <div className="max-w-7xl mx-auto p-8 pt-0">
         <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/50">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent mb-8">
-            New Invoice
+            Update Dummy Invoice
           </h1>
           <div className="space-y-4 md:col-span-2">
             <label className="block text-sm font-semibold text-gray-700">
-              Invoice No.
+              Dummy Invoice No.
             </label>
             <input
               readOnly
               className="w-full px-4 py-3 bg-indigo-50 border border-indigo-200 rounded-xl font-mono font-semibold text-lg cursor-not-allowed"
-              value={form.invoiceNo}
+              value={form.duminvoiceNo}
             />
-            {sourceEstimateNo && (
-              <p className="mt-2 text-sm text-orange-600 font-medium">
-                Converted from quotation: {sourceEstimateNo}
-              </p>
-            )}
           </div>
           {/* Customer Details Card */}
           <div className="grid md:grid-cols-3 gap-6 my-10 p-8  rounded-2xl border border-indigo-100">
@@ -330,41 +267,6 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
                 required
                 onChange={(e) => setForm({ ...form, address: e.target.value })}
               />
-            </div>
-            <div className="col-span-3">
-              {frequentCustomers.length > 0 && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-500 mb-2">Recent Customers</p>
-
-                  <div className="flex flex-wrap gap-2">
-                    {frequentCustomers.map((c, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        onClick={() => {
-                          setForm({
-                            ...form,
-                            customerName: c.customerName,
-                            phone: c.phone,
-                            gst: c.gst,
-                            address: c.address,
-                            city: c.city,
-                          });
-                        }}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm shadow-sm border"
-                      >
-                        {/* Icon circle */}
-                        <span className="w-5 h-5 flex items-center justify-center bg-gray-300 rounded-full text-xs">
-                          👤
-                        </span>
-
-                        {/* Name */}
-                        <span className="font-medium">{c.customerName}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           </div>
 
@@ -587,6 +489,7 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
               </div>
             </div>
           </div>
+
           <div className="flex flex-col">
             <h3 className="font-bold text-sm pb-1 text-red-600 border-b w-fit">
               Terms & Conditions
@@ -625,17 +528,18 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
               </div>
             </div>
           </div>
+
           {/* Save Button */}
           <div className="mt-12 text-center flex gap-6 justify-center">
             <Link
-              href={INVOICE}
+              href={DUMMY_INVOICE}
               className="bg-gray-400 text-black px-12 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl  hover:-translate-y-1  duration-300"
             >
               Cancel
             </Link>
             <button
               disabled={loading}
-              onClick={handleSave}
+              onClick={handleUpdateInvoice}
               className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white px-12 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl  hover:-translate-y-1  duration-300"
             >
               {loading ? "Saving..." : "💾 Save"}
@@ -645,4 +549,6 @@ export default function AddInvoice({ invoice }: InvoiceInterface) {
       </div>
     </div>
   );
-}
+};
+
+export default UpdateDummyInvoice;
