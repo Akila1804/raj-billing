@@ -486,10 +486,22 @@ export default function LedgerPage() {
                     Closing Balance
                   </td>
                   <td className="border p-2 text-right">
-                    {totalCredit > totalDebit ? formatAmount(difference) : ""}
+                    {totalCredit > totalDebit ? (
+                      <span className="inline-block rounded bg-yellow-300 px-2 py-1">
+                        {formatAmount(difference)}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </td>
                   <td className="border p-2 text-right">
-                    {totalDebit > totalCredit ? formatAmount(difference) : ""}
+                    {totalDebit > totalCredit ? (
+                      <span className="inline-block rounded bg-yellow-300 px-2 py-1">
+                        {formatAmount(difference)}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </td>
                   <td className="border p-2"></td>
                 </tr>
