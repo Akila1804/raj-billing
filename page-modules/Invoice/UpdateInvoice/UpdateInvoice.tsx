@@ -384,7 +384,7 @@ const UpdateInvoice = () => {
 
               {/* Packing */}
               {/* <div className=" items-center gap-3">
-                <span>Packing & Forwarding</span>
+                <span>Transportation Charge</span>
 
                 <input
                   type="number"
@@ -399,7 +399,7 @@ const UpdateInvoice = () => {
               <div className="flex justify-between text-center border-b pb-2">
                 <div className="flex gap-2 justify-center items-center">
                   <p className="flex flex-col items-start gap-1">
-                    <span>Packing & Forwarding</span>
+                    <span>Transportation Charge</span>
                     Taxable Amount{" "}
                   </p>
                   <input

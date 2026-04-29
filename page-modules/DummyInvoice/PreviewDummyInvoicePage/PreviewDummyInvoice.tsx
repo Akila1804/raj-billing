@@ -389,7 +389,7 @@ const PreviewDummyInvoice = () => {
                     <span>₹ {subTotal.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between font-medium">
-                    <span>Packing</span>
+                    <span>Transportation Charge</span>
                     <span>₹ {Number(form.packing).toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between pt-2 border-t">
