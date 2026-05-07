@@ -186,7 +186,7 @@ const PreviewDummyInvoice = () => {
                   isMoreProducts ? "text-base" : "text-xl"
                 }`}
               >
-                DINVOICE SLIP
+                INVOICE SLIP
               </h1>
             </div>
 
