@@ -389,15 +389,15 @@ const PreviewEstimate = () => {
                   </div>
                   <div className="flex justify-between text-[10px]">
                     <span>CGST ({form.cgst}%)</span>
-                    <span>₹ {cgstAmount}</span>
+                    <span>₹ {cgstAmount.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between text-[10px]">
                     <span>SGST ({form.sgst}%)</span>
-                    <span>₹ {sgstAmount}</span>
+                    <span>₹ {sgstAmount.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between text-[10px]">
                     <span>IGST ({form.igst}%)</span>
-                    <span>₹ {igstAmount}</span>
+                    <span>₹ {igstAmount.toLocaleString()}</span>
                   </div>
                   <div className="border-t pt-2">
                     <div className="flex justify-between text-lg font-bold text-black mb-2">
