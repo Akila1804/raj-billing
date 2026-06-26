@@ -1,0 +1,34 @@
+export interface JobCard {
+  id: string;
+  jobno: string;
+  job_name: string;
+  description: string;
+  offset_name: string;
+  paper: string;
+  paper_qty: string;
+  paper_qty_unit: string;
+  paper_printing_type: string;
+  plate_com_name: string;
+  plate_color: string;
+  lamination: boolean;
+  lamination_type: string;
+  lamination_com_name: string;
+  scoring: boolean;
+  scoring_type: string;
+  scoring_com_name: string;
+  pasting: boolean;
+  pasting_type: string;
+  pasting_com_name: string;
+  folding: boolean;
+  folding_type: string;
+  folding_com_name: string;
+  binding: boolean;
+  binding_type: string;
+  binding_com_name: string;
+  cutting: boolean;
+  cutting_type: string;
+  cutting_com_name: string;
+  extra_work: string;
+  created_at: string;
+  updated_at: string;
+}

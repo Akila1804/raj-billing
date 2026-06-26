@@ -1,8 +1,14 @@
 "use client";
 import Image from "next/image";
-import { Calculator, FileText, LogOut } from "lucide-react";
+import { Calculator, FileText, LogOut, LucideJoystick } from "lucide-react";
 import Link from "next/link";
-import { DUMMY_INVOICE, ESTIMATION, INVOICE, TALLY } from "@/constants/path";
+import {
+  DUMMY_INVOICE,
+  ESTIMATION,
+  INVOICE,
+  TALLY,
+  JOB_CARD,
+} from "@/constants/path";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
@@ -88,6 +94,19 @@ const Dashboard = () => {
         >
           <FileText size={34} className="group-hover:scale-110 transition" />
           <span className="text-lg font-semibold">Tally</span>
+        </Link>
+      </div>
+      {/* <div className="flex flex-col sm:flex-row gap-8 mt-10"> */}
+      <div className=" mt-8">
+        <Link
+          href={JOB_CARD}
+          className="group w-80 h-36 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transition duration-300 hover:-translate-y-2"
+        >
+          <LucideJoystick
+            size={34}
+            className="group-hover:scale-110 transition"
+          />
+          <span className="text-lg font-semibold">Job Card</span>
         </Link>
       </div>
     </div>

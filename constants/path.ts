@@ -21,3 +21,8 @@ export const PREVIEW_DUMMY_INVOICE = "/dummy-invoice/preview-duminvoice";
 // Tally
 export const TALLY = "/tally";
 export const TALLY_DETAILS = "/tally-details";
+
+// Job Card
+export const JOB_CARD = "/job-card";
+export const ADD_JOB_CARD = "/add-job";
+export const UPDATE_JOB_CARD = "/update-job";
