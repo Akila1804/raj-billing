@@ -9,6 +9,7 @@ export interface JobCard {
   paper_qty_unit: string;
   paper_printing_type: string;
   plate_com_name: string;
+  plate_type: string;
   plate_color: string;
   lamination: boolean;
   lamination_type: string;

@@ -17,6 +17,8 @@ const initialForm = {
   paper_qty_unit: "",
   paper_printing_type: "Single Side",
   plate_com_name: "",
+  plate_type: "",
+  plate_name: "",
   plate_color: "",
   lamination: false,
   lamination_type: "",
@@ -39,6 +41,30 @@ const initialForm = {
   extra_work: "",
 };
 
+const offsetNameOptions = [
+  "Select offset name",
+  "ABC Offset",
+  "Bright Print House",
+  "Metro Offset",
+  "Sunrise Press",
+];
+
+const paperOptions = [
+  "Select paper",
+  "Art Paper",
+  "Maplitho",
+  "Glossy Paper",
+  "CB Paper",
+];
+
+const finishingCompanyOptions = [
+  "Select company",
+  "ABC Finishing",
+  "Bright Press",
+  "Metro Bindery",
+  "Global Works",
+];
+
 const AddJobCard = () => {
   const [form, setForm] = useState(initialForm);
 
@@ -58,7 +84,9 @@ const AddJobCard = () => {
       { key: "offset_name", label: "Offset Name" },
       { key: "paper", label: "Paper" },
       { key: "paper_qty", label: "Paper Qty" },
-      { key: "plate_com_name", label: "Plate Name" },
+      { key: "plate_com_name", label: "Plate Company Name" },
+      { key: "plate_type", label: "Plate Type" },
+      { key: "plate_name", label: "Plate Name" },
       { key: "plate_color", label: "Plate Color" },
     ] as const;
 
@@ -191,14 +219,22 @@ const AddJobCard = () => {
                   <label className="mb-1 block text-sm font-medium text-gray-700">
                     Offset Name <span className="text-red-500">*</span>
                   </label>
-                  <input
+                  <select
                     value={form.offset_name}
                     onChange={(e) =>
                       handleChange("offset_name", e.target.value)
                     }
                     className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
-                    placeholder="Enter offset name"
-                  />
+                  >
+                    {offsetNameOptions.map((option) => (
+                      <option
+                        key={option}
+                        value={option === "Select offset name" ? "" : option}
+                      >
+                        {option}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="md:col-span-2 xl:col-span-3">
                   <label className="mb-1 block text-sm font-medium text-gray-700">
@@ -226,12 +262,20 @@ const AddJobCard = () => {
                   <label className="mb-1 block text-sm font-medium text-gray-700">
                     Paper <span className="text-red-500">*</span>
                   </label>
-                  <input
+                  <select
                     value={form.paper}
                     onChange={(e) => handleChange("paper", e.target.value)}
                     className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
-                    placeholder="Art Paper"
-                  />
+                  >
+                    {paperOptions.map((option) => (
+                      <option
+                        key={option}
+                        value={option === "Select paper" ? "" : option}
+                      >
+                        {option}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className="mb-1 block text-sm font-medium text-gray-700">
@@ -278,7 +322,7 @@ const AddJobCard = () => {
                 </div>
                 <div>
                   <label className="mb-1 block text-sm font-medium text-gray-700">
-                    Plate Name <span className="text-red-500">*</span>
+                    Plate Company Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     value={form.plate_com_name}
@@ -286,7 +330,29 @@ const AddJobCard = () => {
                       handleChange("plate_com_name", e.target.value)
                     }
                     className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
-                    placeholder="Plate Type A"
+                    placeholder="Plate Company"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                    Plate Type <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    value={form.plate_type}
+                    onChange={(e) => handleChange("plate_type", e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
+                    placeholder="Type A"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                    Plate Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    value={form.plate_name}
+                    onChange={(e) => handleChange("plate_name", e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
+                    placeholder="Plate Name"
                   />
                 </div>
                 <div>
@@ -341,14 +407,24 @@ const AddJobCard = () => {
                             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
                             placeholder={`${option.label} type`}
                           />
-                          <input
+                          <select
                             value={String(form[companyKey])}
                             onChange={(e) =>
                               handleChange(companyKey, e.target.value)
                             }
                             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
-                            placeholder="Company name"
-                          />
+                          >
+                            {finishingCompanyOptions.map((company) => (
+                              <option
+                                key={company}
+                                value={
+                                  company === "Select company" ? "" : company
+                                }
+                              >
+                                {company}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                       )}
                     </div>
