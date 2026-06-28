@@ -27,6 +27,7 @@ const estimate: JobCard[] = [
     paper_printing_type: "Single Side",
     plate_com_name: "Plate Type A",
     plate_color: "5",
+    plate_type: "Type A",
     lamination: true,
     lamination_type: "Glossy",
     lamination_com_name: "Company A",
@@ -60,6 +61,7 @@ const estimate: JobCard[] = [
     paper_qty_unit: "Sheets",
     paper_printing_type: "Single Side",
     plate_com_name: "Plate Type A",
+    plate_type: "Type A",
     plate_color: "5",
     lamination: false,
     lamination_type: "",
@@ -569,7 +571,8 @@ export default function JobCardPage() {
                   <div>
                     <p className="text-xs uppercase text-gray-400">Plate</p>
                     <p>
-                      {selectedJob.plate_com_name || "Not Available"} (
+                      {selectedJob.plate_com_name || "Not Available"} -{" "}
+                      {selectedJob.plate_type || "Not Available"} (
                       {selectedJob.plate_color || "-"} Colors)
                     </p>
                   </div>
